@@ -25,7 +25,7 @@ import pandas as pd
 import yaml
 from dotenv import load_dotenv
 
-from collectors.market_collector import MarketCollector
+from collectors.market_collector import MarketCollector, _parse_symbol_list
 from db.database import get_engine, get_session, init_db
 from db.models import Signal, Trade
 from db.repository import (
@@ -122,7 +122,7 @@ def run_phase2(config: dict, market: str, start_date: str, end_date: str) -> Non
     mk = MarketKey(pivot_threshold_pct=livermore_cfg.get("pivot_threshold_pct", 5.0))
 
     market_cfg = config.get("markets", {}).get(market, {})
-    watchlist = market_cfg.get("watchlist", [])
+    watchlist = _parse_symbol_list(market_cfg.get("watchlist", []))
 
     session = get_session()
     try:
@@ -206,8 +206,8 @@ def run_phase3(
     )
 
     market_cfg = config.get("markets", {}).get(market, {})
-    watchlist = market_cfg.get("watchlist", [])
-    indices = market_cfg.get("indices", [])
+    watchlist = _parse_symbol_list(market_cfg.get("watchlist", []))
+    indices = _parse_symbol_list(market_cfg.get("indices", []))
 
     session = get_session()
     all_signals: list[dict] = []
@@ -416,8 +416,8 @@ def main() -> None:
     parser.add_argument(
         "--days",
         type=int,
-        default=90,
-        help="Number of days of history to collect (default: 90)",
+        default=365,
+        help="Number of days of history to collect (default: 365)",
     )
     args = parser.parse_args()
 

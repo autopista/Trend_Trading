@@ -16,6 +16,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 from pathlib import Path
 
+import yaml
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 from sqlalchemy import and_, select, func
 
@@ -289,6 +290,37 @@ def api_performance(market: str):
         })
     finally:
         session.close()
+
+
+# ---------------------------------------------------------------------------
+# API — Symbol Names
+# ---------------------------------------------------------------------------
+
+def _load_settings() -> dict:
+    """Load settings.yaml and cache the result."""
+    config_path = Path(__file__).parent.parent / "config" / "settings.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+@app.route("/api/<market>/symbol-names")
+def api_symbol_names(market: str):
+    """Return ``{ticker: display_name}`` mapping for watchlist and indices.
+
+    This allows the frontend to show human-readable names next to ticker codes.
+    """
+    config = _load_settings()
+    market_cfg = config.get("markets", {}).get(market, {})
+
+    names: dict[str, str] = {}
+    for section in ("watchlist", "indices"):
+        for item in market_cfg.get(section, []):
+            if isinstance(item, dict):
+                names[item["ticker"]] = item.get("name", item["ticker"])
+            else:
+                names[str(item)] = str(item)
+
+    return jsonify(names)
 
 
 # ---------------------------------------------------------------------------

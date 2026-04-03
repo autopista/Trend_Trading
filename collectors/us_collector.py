@@ -48,8 +48,10 @@ class USCollector(BaseCollector):
                 }
             )
             df.index.name = "date"
+            df = df.reset_index()
+            df["date"] = pd.to_datetime(df["date"]).dt.date
             # Keep only standard OHLCV columns
-            cols = [c for c in ("open", "high", "low", "close", "volume") if c in df.columns]
+            cols = [c for c in ("date", "open", "high", "low", "close", "volume") if c in df.columns]
             return df[cols]
 
         df = self._retry(_fetch)

@@ -59,12 +59,12 @@ def _make_config() -> dict:
     return {
         "markets": {
             "kr": {
-                "watchlist": ["005930"],
-                "indices": ["KOSPI"],
+                "watchlist": [{"ticker": "005930", "name": "삼성전자"}],
+                "indices": [{"ticker": "1001", "name": "KOSPI"}],
             },
             "us": {
-                "watchlist": ["AAPL"],
-                "indices": ["^GSPC"],
+                "watchlist": [{"ticker": "AAPL", "name": "Apple"}],
+                "indices": [{"ticker": "^GSPC", "name": "S&P 500"}],
             },
         },
         "livermore": {

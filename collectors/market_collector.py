@@ -13,6 +13,35 @@ from .base import BaseCollector
 logger = logging.getLogger(__name__)
 
 
+def _parse_symbol_list(items: list) -> list[str]:
+    """Extract ticker strings from a list that may contain dicts or plain strings.
+
+    Supports both old format (``["AAPL", "MSFT"]``) and new format
+    (``[{"ticker": "AAPL", "name": "Apple"}, ...]``).
+    """
+    result: list[str] = []
+    for item in items:
+        if isinstance(item, dict):
+            result.append(item["ticker"])
+        else:
+            result.append(str(item))
+    return result
+
+
+def _parse_name_map(items: list) -> dict[str, str]:
+    """Build a {ticker: display_name} mapping from a symbol/index list.
+
+    For plain strings the ticker is used as the display name.
+    """
+    mapping: dict[str, str] = {}
+    for item in items:
+        if isinstance(item, dict):
+            mapping[item["ticker"]] = item.get("name", item["ticker"])
+        else:
+            mapping[str(item)] = str(item)
+    return mapping
+
+
 class MarketCollector:
     """High-level facade that drives both KR and US collectors."""
 
@@ -20,14 +49,24 @@ class MarketCollector:
         kr_cfg = config.get("markets", {}).get("kr", {})
         us_cfg = config.get("markets", {}).get("us", {})
 
+        kr_watchlist = _parse_symbol_list(kr_cfg.get("watchlist", []))
+        kr_indices = _parse_symbol_list(kr_cfg.get("indices", []))
+        us_watchlist = _parse_symbol_list(us_cfg.get("watchlist", []))
+        us_indices = _parse_symbol_list(us_cfg.get("indices", []))
+
         self.kr_collector = KRCollector(
-            watchlist=kr_cfg.get("watchlist", []),
-            indices=kr_cfg.get("indices", []),
+            watchlist=kr_watchlist,
+            indices=kr_indices,
         )
         self.us_collector = USCollector(
-            watchlist=us_cfg.get("watchlist", []),
-            indices=us_cfg.get("indices", []),
+            watchlist=us_watchlist,
+            indices=us_indices,
         )
+
+        # Display-name mappings for indices (used when upserting to DB)
+        self.index_name_map: dict[str, str] = {}
+        self.index_name_map.update(_parse_name_map(kr_cfg.get("indices", [])))
+        self.index_name_map.update(_parse_name_map(us_cfg.get("indices", [])))
 
     def collect_all(
         self,
@@ -97,22 +136,24 @@ class MarketCollector:
 
         # Determine index list from the collector
         index_list: list[str] = getattr(collector, "indices", [])
-        for idx_name in index_list:
-            logger.info("[%s] Fetching index: %s", market_name, idx_name)
+        for idx_ticker in index_list:
+            display_name = self.index_name_map.get(idx_ticker, idx_ticker)
+            logger.info("[%s] Fetching index: %s (%s)", market_name, display_name, idx_ticker)
             try:
-                df = collector.fetch_index(idx_name, start_date, end_date)
+                df = collector.fetch_index(idx_ticker, start_date, end_date)
                 if df.empty:
                     logger.warning(
-                        "[%s] Empty index data for %s", market_name, idx_name
+                        "[%s] Empty index data for %s", market_name, display_name
                     )
-                    failed.append(idx_name)
+                    failed.append(idx_ticker)
                 else:
-                    indices[idx_name] = df
+                    # Store under the display name so DB gets human-readable names
+                    indices[display_name] = df
             except Exception:
                 logger.exception(
-                    "[%s] Failed to fetch index %s", market_name, idx_name
+                    "[%s] Failed to fetch index %s", market_name, display_name
                 )
-                failed.append(idx_name)
+                failed.append(idx_ticker)
 
         logger.info(
             "[%s] Collection complete — %d stocks, %d indices, %d failed",

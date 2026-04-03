@@ -134,6 +134,7 @@
     let chart = null;
     let candleSeries = null;
     let volumeSeries = null;
+    let symbolNames = {};  // {ticker: display_name} mapping
 
     // -----------------------------------------------------------------------
     // Navigation
@@ -242,7 +243,7 @@
             <div class="signal-card bg-slate-700/50 hover:bg-slate-700 rounded-lg p-3 cursor-pointer"
                  data-symbol="${sig.symbol}" onclick="selectSignal(this, '${sig.symbol}')">
               <div class="flex items-center justify-between mb-1">
-                <span class="font-semibold text-sm">${sig.symbol}</span>
+                <span class="font-semibold text-sm">${displayName(sig.symbol)}</span>
                 ${typeBadge}
               </div>
               <div class="text-xs text-slate-400 truncate mb-1">${sig.reason || ''}</div>
@@ -277,7 +278,7 @@
     }
 
     async function loadChart(symbol, days) {
-      document.getElementById('chart-symbol').textContent = symbol;
+      document.getElementById('chart-symbol').textContent = displayName(symbol);
       document.getElementById('chart-placeholder').style.display = 'none';
 
       try {
@@ -389,12 +390,34 @@
     }
 
     // -----------------------------------------------------------------------
+    // Symbol Names
+    // -----------------------------------------------------------------------
+    async function loadSymbolNames() {
+      try {
+        symbolNames = await fetchJSON(`/api/${market}/symbol-names`);
+      } catch (e) {
+        console.error('Failed to load symbol names:', e);
+        symbolNames = {};
+      }
+    }
+
+    function displayName(symbol) {
+      const name = symbolNames[symbol];
+      if (name && name !== symbol) {
+        return `${name} (${symbol})`;
+      }
+      return symbol;
+    }
+
+    // -----------------------------------------------------------------------
     // Init
     // -----------------------------------------------------------------------
     updateMarketButtons();
-    loadIndices();
-    loadSummary();
-    loadSignals();
+    loadSymbolNames().then(() => {
+      loadIndices();
+      loadSummary();
+      loadSignals();
+    });
   </script>
 </body>
 </html>
