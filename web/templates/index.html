@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livermore Trend - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lightweight-charts@4/dist/lightweight-charts.standalone.production.js"></script>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; }
+    .signal-card { transition: all 0.15s ease; }
+    .signal-card:hover { transform: translateY(-1px); }
+    .signal-card.active { ring: 2px; outline: 2px solid #3b82f6; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="bg-slate-800 border-b border-slate-700 px-6 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <span class="text-amber-500 font-bold text-xl tracking-tight">Livermore Trend</span>
+
+        <!-- Market toggle -->
+        <div class="flex bg-slate-700 rounded-lg p-0.5">
+          <button onclick="switchMarket('kr')"
+                  id="btn-kr"
+                  class="market-btn px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
+            &#x1F1F0;&#x1F1F7; 국장
+          </button>
+          <button onclick="switchMarket('us')"
+                  id="btn-us"
+                  class="market-btn px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
+            &#x1F1FA;&#x1F1F8; 미장
+          </button>
+        </div>
+
+        <!-- Sub menu -->
+        <div class="flex gap-4 ml-4">
+          <a href="#" id="nav-dashboard"
+             class="text-sm font-medium pb-1 border-b-2 border-blue-500 text-blue-400">대시보드</a>
+          <a id="nav-performance"
+             class="text-sm font-medium pb-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 cursor-pointer">투자성과</a>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400" id="last-update">마지막 업데이트: -</div>
+    </div>
+  </nav>
+
+  <main class="p-6 max-w-[1600px] mx-auto">
+
+    <!-- Market Index Cards -->
+    <section id="indices-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <!-- filled by JS -->
+    </section>
+
+    <!-- Signal Summary Cards -->
+    <section id="summary-section" class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-green-500">
+        <div class="text-sm text-slate-400">매수</div>
+        <div class="text-3xl font-bold text-green-400" id="count-buy">0</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-red-500">
+        <div class="text-sm text-slate-400">매도</div>
+        <div class="text-3xl font-bold text-red-400" id="count-sell">0</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-yellow-500">
+        <div class="text-sm text-slate-400">관찰</div>
+        <div class="text-3xl font-bold text-yellow-400" id="count-watch">0</div>
+      </div>
+    </section>
+
+    <!-- Main Area: Signal List + Chart -->
+    <section class="flex gap-4" style="min-height: 560px;">
+
+      <!-- Left: Signal List -->
+      <div class="w-[340px] flex-shrink-0 bg-slate-800 rounded-lg overflow-hidden flex flex-col">
+        <div class="px-4 py-3 border-b border-slate-700 text-sm font-semibold text-slate-300">시그널 목록</div>
+        <div id="signal-list" class="flex-1 overflow-y-auto p-2 space-y-2">
+          <div class="text-center text-slate-500 text-sm py-8">데이터를 불러오는 중...</div>
+        </div>
+      </div>
+
+      <!-- Right: Chart Area -->
+      <div class="flex-1 bg-slate-800 rounded-lg overflow-hidden flex flex-col">
+        <!-- Chart Header -->
+        <div class="px-4 py-3 border-b border-slate-700 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="font-semibold text-lg" id="chart-symbol">종목을 선택하세요</span>
+            <span class="text-sm text-slate-400" id="chart-info"></span>
+          </div>
+          <div class="flex bg-slate-700 rounded-lg p-0.5">
+            <button onclick="changePeriod(30)"  class="period-btn px-3 py-1 rounded-md text-xs font-medium">1M</button>
+            <button onclick="changePeriod(90)"  class="period-btn px-3 py-1 rounded-md text-xs font-medium bg-blue-500 text-white active-period">3M</button>
+            <button onclick="changePeriod(180)" class="period-btn px-3 py-1 rounded-md text-xs font-medium">6M</button>
+            <button onclick="changePeriod(365)" class="period-btn px-3 py-1 rounded-md text-xs font-medium">1Y</button>
+          </div>
+        </div>
+
+        <!-- Candlestick Chart -->
+        <div id="chart-container" class="flex-1 relative" style="min-height: 380px;">
+          <div id="chart-placeholder" class="absolute inset-0 flex items-center justify-center text-slate-500">
+            좌측 시그널을 클릭하면 차트가 표시됩니다
+          </div>
+        </div>
+
+        <!-- Livermore State Bar -->
+        <div class="px-4 py-3 border-t border-slate-700">
+          <div class="text-xs text-slate-400 mb-2">Livermore 추세 상태</div>
+          <div id="livermore-bar" class="grid grid-cols-6 gap-1">
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="upward_trend">상승 추세</div>
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="natural_rally">자연 반등</div>
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="secondary_rally">2차 반등</div>
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="secondary_reaction">2차 반락</div>
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="natural_reaction">자연 반락</div>
+            <div class="state-block rounded px-2 py-1.5 text-center text-xs bg-slate-700 text-slate-400" data-state="downward_trend">하락 추세</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // -----------------------------------------------------------------------
+    // State
+    // -----------------------------------------------------------------------
+    let market = '{{ market }}';
+    let currentSymbol = null;
+    let currentDays = 90;
+    let chart = null;
+    let candleSeries = null;
+    let volumeSeries = null;
+
+    // -----------------------------------------------------------------------
+    // Navigation
+    // -----------------------------------------------------------------------
+    document.getElementById('nav-performance').addEventListener('click', () => {
+      window.location.href = `/${market}/performance`;
+    });
+
+    function switchMarket(m) {
+      window.location.href = `/${m}/dashboard`;
+    }
+
+    function updateMarketButtons() {
+      document.querySelectorAll('.market-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+      const active = document.getElementById(`btn-${market}`);
+      if (active) {
+        active.classList.add('bg-blue-500', 'text-white');
+        active.classList.remove('text-slate-300');
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // API helpers
+    // -----------------------------------------------------------------------
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    // -----------------------------------------------------------------------
+    // Market Indices
+    // -----------------------------------------------------------------------
+    async function loadIndices() {
+      try {
+        const data = await fetchJSON(`/api/${market}/indices`);
+        const container = document.getElementById('indices-section');
+        if (!data.length) {
+          container.innerHTML = '<div class="col-span-4 text-center text-slate-500 text-sm py-4">지수 데이터 없음</div>';
+          return;
+        }
+        container.innerHTML = data.map(idx => {
+          const positive = (idx.change_pct || 0) >= 0;
+          const borderColor = positive ? 'border-green-500' : 'border-red-500';
+          const changeColor = positive ? 'text-green-400' : 'text-red-400';
+          const arrow = positive ? '+' : '';
+          return `
+            <div class="bg-slate-800 rounded-lg p-4 border-l-4 ${borderColor}">
+              <div class="text-sm text-slate-400">${idx.index_name}</div>
+              <div class="text-2xl font-bold">${Number(idx.value).toLocaleString()}</div>
+              <div class="flex items-center justify-between mt-1">
+                <span class="${changeColor} text-sm font-medium">${arrow}${(idx.change_pct || 0).toFixed(2)}%</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">${idx.trend_state || '-'}</span>
+              </div>
+            </div>`;
+        }).join('');
+
+        // Update timestamp from latest date
+        const latestDate = data[0]?.date || '-';
+        document.getElementById('last-update').textContent = `마지막 업데이트: ${latestDate}`;
+      } catch (e) {
+        console.error('Failed to load indices:', e);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Signal Summary
+    // -----------------------------------------------------------------------
+    async function loadSummary() {
+      try {
+        const data = await fetchJSON(`/api/${market}/signals/summary`);
+        document.getElementById('count-buy').textContent = data.buy || 0;
+        document.getElementById('count-sell').textContent = data.sell || 0;
+        document.getElementById('count-watch').textContent = data.watch || 0;
+      } catch (e) {
+        console.error('Failed to load summary:', e);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Signal List
+    // -----------------------------------------------------------------------
+    async function loadSignals() {
+      try {
+        const data = await fetchJSON(`/api/${market}/signals`);
+        const container = document.getElementById('signal-list');
+
+        if (!data.length) {
+          container.innerHTML = '<div class="text-center text-slate-500 text-sm py-8">시그널 없음</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(sig => {
+          const typeBadge = {
+            buy:   '<span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">매수</span>',
+            sell:  '<span class="px-2 py-0.5 rounded text-xs font-medium bg-red-500/20 text-red-400">매도</span>',
+            watch: '<span class="px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400">관찰</span>',
+          }[sig.signal_type] || '<span class="px-2 py-0.5 rounded text-xs font-medium bg-slate-600 text-slate-300">' + sig.signal_type + '</span>';
+
+          const conf = sig.confidence != null ? `<span class="text-xs text-slate-400">${(sig.confidence * 100).toFixed(0)}%</span>` : '';
+
+          return `
+            <div class="signal-card bg-slate-700/50 hover:bg-slate-700 rounded-lg p-3 cursor-pointer"
+                 data-symbol="${sig.symbol}" onclick="selectSignal(this, '${sig.symbol}')">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-semibold text-sm">${sig.symbol}</span>
+                ${typeBadge}
+              </div>
+              <div class="text-xs text-slate-400 truncate mb-1">${sig.reason || ''}</div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">${sig.price ? Number(sig.price).toLocaleString() : '-'}</span>
+                ${conf}
+              </div>
+            </div>`;
+        }).join('');
+      } catch (e) {
+        console.error('Failed to load signals:', e);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Signal selection & Chart
+    // -----------------------------------------------------------------------
+    function selectSignal(el, symbol) {
+      document.querySelectorAll('.signal-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      currentSymbol = symbol;
+      loadChart(symbol, currentDays);
+    }
+
+    function changePeriod(days) {
+      currentDays = days;
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white', 'active-period');
+      });
+      event.target.classList.add('bg-blue-500', 'text-white', 'active-period');
+      if (currentSymbol) loadChart(currentSymbol, days);
+    }
+
+    async function loadChart(symbol, days) {
+      document.getElementById('chart-symbol').textContent = symbol;
+      document.getElementById('chart-placeholder').style.display = 'none';
+
+      try {
+        const data = await fetchJSON(`/api/${market}/chart/${symbol}?days=${days}`);
+        renderChart(data);
+        updateLivermoreBar(data.livermore_states);
+      } catch (e) {
+        console.error('Failed to load chart:', e);
+      }
+    }
+
+    function renderChart(data) {
+      const container = document.getElementById('chart-container');
+
+      // Destroy existing chart
+      if (chart) {
+        chart.remove();
+        chart = null;
+      }
+
+      chart = LightweightCharts.createChart(container, {
+        width: container.clientWidth,
+        height: container.clientHeight,
+        layout: {
+          background: { type: 'solid', color: '#1e293b' },
+          textColor: '#94a3b8',
+        },
+        grid: {
+          vertLines: { color: '#334155' },
+          horzLines: { color: '#334155' },
+        },
+        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        rightPriceScale: { borderColor: '#475569' },
+        timeScale: { borderColor: '#475569', timeVisible: false },
+      });
+
+      // Candlestick
+      candleSeries = chart.addCandlestickSeries({
+        upColor: '#22c55e',
+        downColor: '#ef4444',
+        borderDownColor: '#ef4444',
+        borderUpColor: '#22c55e',
+        wickDownColor: '#ef4444',
+        wickUpColor: '#22c55e',
+      });
+
+      const candles = (data.ohlcv || []).map(d => ({
+        time: d.date,
+        open: d.open,
+        high: d.high,
+        low: d.low,
+        close: d.close,
+      }));
+      candleSeries.setData(candles);
+
+      // Volume
+      volumeSeries = chart.addHistogramSeries({
+        priceFormat: { type: 'volume' },
+        priceScaleId: '',
+      });
+      volumeSeries.priceScale().applyOptions({
+        scaleMargins: { top: 0.8, bottom: 0 },
+      });
+
+      const volumes = (data.ohlcv || []).map(d => ({
+        time: d.date,
+        value: d.volume,
+        color: d.close >= d.open ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)',
+      }));
+      volumeSeries.setData(volumes);
+
+      chart.timeScale().fitContent();
+
+      // Resize observer
+      const ro = new ResizeObserver(() => {
+        if (chart) chart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+      });
+      ro.observe(container);
+    }
+
+    function updateLivermoreBar(states) {
+      // Reset all
+      document.querySelectorAll('.state-block').forEach(el => {
+        el.classList.remove('bg-green-500', 'bg-red-500', 'bg-blue-500', 'text-white');
+        el.classList.add('bg-slate-700', 'text-slate-400');
+      });
+
+      if (!states || !states.length) return;
+
+      const latest = states[states.length - 1];
+      const currentState = latest.column_state;
+      const direction = latest.trend_direction;
+
+      document.querySelectorAll('.state-block').forEach(el => {
+        if (el.dataset.state === currentState) {
+          el.classList.remove('bg-slate-700', 'text-slate-400');
+          if (direction === 'up' || currentState.includes('upward') || currentState.includes('rally')) {
+            el.classList.add('bg-green-500', 'text-white');
+          } else {
+            el.classList.add('bg-red-500', 'text-white');
+          }
+        }
+      });
+
+      const info = [];
+      if (latest.trend_strength != null) info.push(`강도: ${latest.trend_strength}`);
+      if (latest.trend_duration_days != null) info.push(`${latest.trend_duration_days}일`);
+      document.getElementById('chart-info').textContent = info.join(' | ');
+    }
+
+    // -----------------------------------------------------------------------
+    // Init
+    // -----------------------------------------------------------------------
+    updateMarketButtons();
+    loadIndices();
+    loadSummary();
+    loadSignals();
+  </script>
+</body>
+</html>
