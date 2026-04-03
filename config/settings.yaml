@@ -1,0 +1,42 @@
+markets:
+  kr:
+    watchlist:
+      - "005930"   # 삼성전자
+      - "000660"   # SK하이닉스
+      - "035420"   # NAVER
+      - "051910"   # LG화학
+      - "006400"   # 삼성SDI
+    indices:
+      - "KOSPI"
+      - "KOSDAQ"
+  us:
+    watchlist:
+      - "AAPL"
+      - "MSFT"
+      - "GOOGL"
+      - "AMZN"
+      - "NVDA"
+    indices:
+      - "^GSPC"    # S&P 500
+      - "^IXIC"    # NASDAQ
+      - "^DJI"     # DOW
+      - "^VIX"     # VIX
+
+livermore:
+  pivot_threshold_pct: 5.0
+  volume_surge_ratio: 1.5
+  lookback_days: 20
+  false_breakout_confirm_days: 2
+
+money_management:
+  max_position_pct: 20
+  split_buy_ratio: [50, 30, 20]
+  stop_loss_pct: 5.0
+
+signals:
+  min_confidence: 60
+  telegram_enabled: true
+
+web:
+  host: "127.0.0.1"
+  port: 5002
