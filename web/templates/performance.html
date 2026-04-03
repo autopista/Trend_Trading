@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livermore Trend - 투자성과</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="bg-slate-800 border-b border-slate-700 px-6 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <span class="text-amber-500 font-bold text-xl tracking-tight">Livermore Trend</span>
+
+        <!-- Market toggle -->
+        <div class="flex bg-slate-700 rounded-lg p-0.5">
+          <button onclick="switchMarket('kr')"
+                  id="btn-kr"
+                  class="market-btn px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
+            &#x1F1F0;&#x1F1F7; 국장
+          </button>
+          <button onclick="switchMarket('us')"
+                  id="btn-us"
+                  class="market-btn px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
+            &#x1F1FA;&#x1F1F8; 미장
+          </button>
+        </div>
+
+        <!-- Sub menu -->
+        <div class="flex gap-4 ml-4">
+          <a id="nav-dashboard"
+             class="text-sm font-medium pb-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 cursor-pointer">대시보드</a>
+          <a href="#" id="nav-performance"
+             class="text-sm font-medium pb-1 border-b-2 border-blue-500 text-blue-400">투자성과</a>
+        </div>
+
+        <!-- Period selector -->
+        <div class="flex bg-slate-700 rounded-lg p-0.5 ml-4">
+          <button onclick="changePeriod(30)"  class="period-btn px-3 py-1 rounded-md text-xs font-medium text-slate-300">1M</button>
+          <button onclick="changePeriod(90)"  class="period-btn px-3 py-1 rounded-md text-xs font-medium bg-blue-500 text-white active-period">3M</button>
+          <button onclick="changePeriod(180)" class="period-btn px-3 py-1 rounded-md text-xs font-medium text-slate-300">6M</button>
+          <button onclick="changePeriod(365)" class="period-btn px-3 py-1 rounded-md text-xs font-medium text-slate-300">1Y</button>
+          <button onclick="changePeriod(0)"   class="period-btn px-3 py-1 rounded-md text-xs font-medium text-slate-300">전체</button>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400" id="last-update">마지막 업데이트: -</div>
+    </div>
+  </nav>
+
+  <main class="p-6 max-w-[1600px] mx-auto">
+
+    <!-- Performance Summary Cards -->
+    <section id="summary-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+      <div class="bg-slate-800 rounded-lg p-4">
+        <div class="text-sm text-slate-400">총 수익률</div>
+        <div class="text-2xl font-bold mt-1" id="stat-pnl">-</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4">
+        <div class="text-sm text-slate-400">승률</div>
+        <div class="text-2xl font-bold mt-1" id="stat-winrate">-</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4">
+        <div class="text-sm text-slate-400">손익비</div>
+        <div class="text-2xl font-bold mt-1" id="stat-pnl-ratio">-</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4">
+        <div class="text-sm text-slate-400">MDD</div>
+        <div class="text-2xl font-bold mt-1" id="stat-mdd">-</div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4">
+        <div class="text-sm text-slate-400">벤치마크 대비 초과수익</div>
+        <div class="text-2xl font-bold mt-1" id="stat-alpha">-</div>
+      </div>
+    </section>
+
+    <!-- Equity Curve Chart -->
+    <section class="bg-slate-800 rounded-lg p-4 mb-6">
+      <div class="text-sm font-semibold text-slate-300 mb-3">포트폴리오 수익률 곡선</div>
+      <div id="equity-chart" style="height: 320px;"></div>
+    </section>
+
+    <!-- Two columns: Trades table + Monthly heatmap -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+
+      <!-- Recent Trades Table -->
+      <div class="lg:col-span-2 bg-slate-800 rounded-lg overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-700 text-sm font-semibold text-slate-300">최근 거래 내역</div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-slate-400 text-xs border-b border-slate-700">
+                <th class="text-left px-4 py-2">종목</th>
+                <th class="text-left px-4 py-2">구분</th>
+                <th class="text-right px-4 py-2">매수가</th>
+                <th class="text-right px-4 py-2">매도가</th>
+                <th class="text-right px-4 py-2">수익률</th>
+                <th class="text-right px-4 py-2">보유일</th>
+              </tr>
+            </thead>
+            <tbody id="trades-body">
+              <tr><td colspan="6" class="text-center text-slate-500 py-8">데이터를 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Monthly Returns Heatmap -->
+      <div class="bg-slate-800 rounded-lg overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-700 text-sm font-semibold text-slate-300">월별 수익률</div>
+        <div id="monthly-heatmap" class="p-4 grid grid-cols-4 gap-2">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Signal Accuracy Stats -->
+    <section class="bg-slate-800 rounded-lg p-4">
+      <div class="text-sm font-semibold text-slate-300 mb-4">시그널 정확도</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Accuracy bars -->
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-slate-400">매수 시그널 정확도</span>
+              <span class="text-green-400 font-medium" id="acc-buy-label">-</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-3">
+              <div id="acc-buy-bar" class="bg-green-500 h-3 rounded-full transition-all" style="width: 0%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-slate-400">매도 시그널 정확도</span>
+              <span class="text-red-400 font-medium" id="acc-sell-label">-</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-3">
+              <div id="acc-sell-bar" class="bg-red-500 h-3 rounded-full transition-all" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional stats -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-slate-700/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">평균 보유 기간</div>
+            <div class="text-lg font-bold mt-1" id="stat-avg-hold">-</div>
+          </div>
+          <div class="bg-slate-700/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">총 거래 수</div>
+            <div class="text-lg font-bold mt-1" id="stat-total-trades">-</div>
+          </div>
+          <div class="bg-slate-700/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">평균 수익</div>
+            <div class="text-lg font-bold text-green-400 mt-1" id="stat-avg-win">-</div>
+          </div>
+          <div class="bg-slate-700/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">평균 손실</div>
+            <div class="text-lg font-bold text-red-400 mt-1" id="stat-avg-loss">-</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // -----------------------------------------------------------------------
+    // State
+    // -----------------------------------------------------------------------
+    let market = '{{ market }}';
+    let currentPeriod = 90;
+    let equityChart = null;
+
+    // -----------------------------------------------------------------------
+    // Navigation
+    // -----------------------------------------------------------------------
+    document.getElementById('nav-dashboard').addEventListener('click', () => {
+      window.location.href = `/${market}/dashboard`;
+    });
+
+    function switchMarket(m) {
+      window.location.href = `/${m}/performance`;
+    }
+
+    function updateMarketButtons() {
+      document.querySelectorAll('.market-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+      const active = document.getElementById(`btn-${market}`);
+      if (active) {
+        active.classList.add('bg-blue-500', 'text-white');
+        active.classList.remove('text-slate-300');
+      }
+    }
+
+    function changePeriod(days) {
+      currentPeriod = days;
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white', 'active-period');
+        btn.classList.add('text-slate-300');
+      });
+      event.target.classList.add('bg-blue-500', 'text-white', 'active-period');
+      event.target.classList.remove('text-slate-300');
+      loadPerformance();
+    }
+
+    // -----------------------------------------------------------------------
+    // API helpers
+    // -----------------------------------------------------------------------
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    // -----------------------------------------------------------------------
+    // Load Performance Data
+    // -----------------------------------------------------------------------
+    async function loadPerformance() {
+      try {
+        const periodParam = currentPeriod > 0 ? `?period=${currentPeriod}` : '';
+        const data = await fetchJSON(`/api/${market}/performance${periodParam}`);
+
+        renderSummaryCards(data.trade_stats);
+        renderEquityCurve(data.portfolio_curve);
+        renderTrades(data.recent_trades);
+        renderMonthlyHeatmap(data.monthly_returns);
+        renderAccuracy(data.signal_accuracy, data.trade_stats, data.recent_trades);
+
+        document.getElementById('last-update').textContent =
+          `마지막 업데이트: ${new Date().toLocaleDateString('ko-KR')}`;
+      } catch (e) {
+        console.error('Failed to load performance:', e);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Summary Cards
+    // -----------------------------------------------------------------------
+    function renderSummaryCards(stats) {
+      if (!stats) return;
+
+      const totalPnl = stats.total_pnl || 0;
+      const pnlColor = totalPnl >= 0 ? 'text-green-400' : 'text-red-400';
+      document.getElementById('stat-pnl').className = `text-2xl font-bold mt-1 ${pnlColor}`;
+      document.getElementById('stat-pnl').textContent = `${totalPnl >= 0 ? '+' : ''}${totalPnl.toLocaleString()}`;
+
+      const winRate = stats.win_rate || 0;
+      const wrColor = winRate >= 50 ? 'text-green-400' : 'text-red-400';
+      document.getElementById('stat-winrate').className = `text-2xl font-bold mt-1 ${wrColor}`;
+      document.getElementById('stat-winrate').textContent = `${winRate.toFixed(1)}%`;
+
+      // Profit/loss ratio
+      const winCount = stats.win_count || 0;
+      const lossCount = stats.loss_count || 0;
+      const ratio = lossCount > 0 ? (winCount / lossCount).toFixed(2) : winCount > 0 ? 'INF' : '-';
+      document.getElementById('stat-pnl-ratio').textContent = ratio;
+
+      // MDD placeholder (not in API, compute from portfolio_curve if available)
+      document.getElementById('stat-mdd').textContent = '-';
+
+      // Alpha placeholder
+      document.getElementById('stat-alpha').textContent = '-';
+    }
+
+    // -----------------------------------------------------------------------
+    // Equity Curve (ApexCharts)
+    // -----------------------------------------------------------------------
+    function renderEquityCurve(curve) {
+      if (equityChart) {
+        equityChart.destroy();
+        equityChart = null;
+      }
+
+      const container = document.getElementById('equity-chart');
+
+      // Build series from portfolio_curve if available
+      let portfolioData = [];
+      let benchmarkData = [];
+
+      if (curve && Array.isArray(curve)) {
+        portfolioData = curve.map(p => ({ x: new Date(p.date).getTime(), y: p.value }));
+        if (curve[0]?.benchmark != null) {
+          benchmarkData = curve.map(p => ({ x: new Date(p.date).getTime(), y: p.benchmark }));
+        }
+      }
+
+      const series = [{ name: '포트폴리오', data: portfolioData }];
+      if (benchmarkData.length) {
+        series.push({ name: '벤치마크', data: benchmarkData });
+      }
+
+      const options = {
+        chart: {
+          type: 'line',
+          height: 320,
+          background: 'transparent',
+          toolbar: { show: false },
+          zoom: { enabled: false },
+        },
+        series: series,
+        colors: ['#3b82f6', '#94a3b8'],
+        stroke: { width: 2, curve: 'smooth' },
+        xaxis: {
+          type: 'datetime',
+          labels: { style: { colors: '#94a3b8', fontSize: '11px' } },
+          axisBorder: { color: '#475569' },
+          axisTicks: { color: '#475569' },
+        },
+        yaxis: {
+          labels: { style: { colors: '#94a3b8', fontSize: '11px' } },
+        },
+        grid: {
+          borderColor: '#334155',
+          strokeDashArray: 3,
+        },
+        legend: {
+          labels: { colors: '#94a3b8' },
+          position: 'top',
+        },
+        tooltip: {
+          theme: 'dark',
+          x: { format: 'yyyy-MM-dd' },
+        },
+        noData: {
+          text: '수익률 데이터 없음',
+          style: { color: '#64748b', fontSize: '14px' },
+        },
+      };
+
+      equityChart = new ApexCharts(container, options);
+      equityChart.render();
+    }
+
+    // -----------------------------------------------------------------------
+    // Recent Trades
+    // -----------------------------------------------------------------------
+    function renderTrades(trades) {
+      const tbody = document.getElementById('trades-body');
+
+      if (!trades || !trades.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-slate-500 py-8">거래 내역 없음</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = trades.map(t => {
+        let statusBadge, statusLabel;
+        if (t.status === 'open') {
+          statusBadge = 'bg-blue-500/20 text-blue-400';
+          statusLabel = '보유';
+        } else if ((t.pnl || 0) > 0) {
+          statusBadge = 'bg-green-500/20 text-green-400';
+          statusLabel = '익절';
+        } else {
+          statusBadge = 'bg-red-500/20 text-red-400';
+          statusLabel = '손절';
+        }
+
+        const pnlPct = t.pnl_pct != null ? `${t.pnl_pct >= 0 ? '+' : ''}${t.pnl_pct.toFixed(2)}%` : '-';
+        const pnlColor = (t.pnl_pct || 0) >= 0 ? 'text-green-400' : 'text-red-400';
+
+        // Holding days
+        let holdDays = '-';
+        if (t.entry_date) {
+          const end = t.exit_date ? new Date(t.exit_date) : new Date();
+          const start = new Date(t.entry_date);
+          holdDays = Math.round((end - start) / 86400000) + '일';
+        }
+
+        return `
+          <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+            <td class="px-4 py-2.5 font-medium">${t.symbol}</td>
+            <td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded text-xs font-medium ${statusBadge}">${statusLabel}</span></td>
+            <td class="px-4 py-2.5 text-right">${t.entry_price ? Number(t.entry_price).toLocaleString() : '-'}</td>
+            <td class="px-4 py-2.5 text-right">${t.exit_price ? Number(t.exit_price).toLocaleString() : '-'}</td>
+            <td class="px-4 py-2.5 text-right ${pnlColor} font-medium">${pnlPct}</td>
+            <td class="px-4 py-2.5 text-right text-slate-400">${holdDays}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    // -----------------------------------------------------------------------
+    // Monthly Returns Heatmap
+    // -----------------------------------------------------------------------
+    function renderMonthlyHeatmap(monthly) {
+      const container = document.getElementById('monthly-heatmap');
+
+      if (!monthly || !Object.keys(monthly).length) {
+        // Generate placeholder months
+        const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+        container.innerHTML = months.map(m =>
+          `<div class="bg-slate-700 rounded p-2 text-center">
+            <div class="text-xs text-slate-500">${m}</div>
+            <div class="text-sm text-slate-500 mt-1">-</div>
+          </div>`
+        ).join('');
+        return;
+      }
+
+      // monthly is expected as { "2026-01": 2.5, "2026-02": -1.3, ... }
+      const entries = Object.entries(monthly).sort();
+      container.innerHTML = entries.map(([key, val]) => {
+        const monthLabel = key.split('-')[1] + '월';
+        const positive = val >= 0;
+        const bg = positive ? 'bg-green-500/20' : 'bg-red-500/20';
+        const textColor = positive ? 'text-green-400' : 'text-red-400';
+        return `
+          <div class="${bg} rounded p-2 text-center">
+            <div class="text-xs text-slate-400">${monthLabel}</div>
+            <div class="text-sm font-medium ${textColor} mt-1">${val >= 0 ? '+' : ''}${val.toFixed(1)}%</div>
+          </div>`;
+      }).join('');
+    }
+
+    // -----------------------------------------------------------------------
+    // Signal Accuracy
+    // -----------------------------------------------------------------------
+    function renderAccuracy(accuracy, stats, trades) {
+      // Accuracy bars
+      if (accuracy) {
+        const buyAcc = accuracy.buy_accuracy || 0;
+        const sellAcc = accuracy.sell_accuracy || 0;
+
+        document.getElementById('acc-buy-label').textContent = `${(buyAcc * 100).toFixed(1)}%`;
+        document.getElementById('acc-buy-bar').style.width = `${buyAcc * 100}%`;
+
+        document.getElementById('acc-sell-label').textContent = `${(sellAcc * 100).toFixed(1)}%`;
+        document.getElementById('acc-sell-bar').style.width = `${sellAcc * 100}%`;
+      }
+
+      // Stats
+      if (stats) {
+        document.getElementById('stat-total-trades').textContent = stats.total_trades || 0;
+      }
+
+      // Compute avg holding period and avg win/loss from trades
+      if (trades && trades.length) {
+        let totalDays = 0, dayCount = 0;
+        let totalWin = 0, winN = 0;
+        let totalLoss = 0, lossN = 0;
+
+        trades.forEach(t => {
+          if (t.entry_date) {
+            const end = t.exit_date ? new Date(t.exit_date) : new Date();
+            const days = Math.round((end - new Date(t.entry_date)) / 86400000);
+            totalDays += days;
+            dayCount++;
+          }
+          if (t.pnl_pct != null) {
+            if (t.pnl_pct > 0) { totalWin += t.pnl_pct; winN++; }
+            else { totalLoss += t.pnl_pct; lossN++; }
+          }
+        });
+
+        document.getElementById('stat-avg-hold').textContent = dayCount > 0 ? `${Math.round(totalDays / dayCount)}일` : '-';
+        document.getElementById('stat-avg-win').textContent = winN > 0 ? `+${(totalWin / winN).toFixed(2)}%` : '-';
+        document.getElementById('stat-avg-loss').textContent = lossN > 0 ? `${(totalLoss / lossN).toFixed(2)}%` : '-';
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Init
+    // -----------------------------------------------------------------------
+    updateMarketButtons();
+    loadPerformance();
+  </script>
+</body>
+</html>
