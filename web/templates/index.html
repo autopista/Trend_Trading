@@ -107,12 +107,22 @@
           </div>
         </div>
 
-        <!-- Candlestick Chart -->
-        <div id="chart-container" class="flex-1 relative" style="min-height: 380px;">
+        <!-- Candlestick + Volume Chart -->
+        <div id="chart-container" class="relative" style="height: 320px;">
           <div id="chart-placeholder" class="absolute inset-0 flex items-center justify-center text-slate-500">
             좌측 시그널을 클릭하면 차트가 표시됩니다
           </div>
         </div>
+        <!-- MACD Chart -->
+        <div class="px-4 border-t border-slate-700">
+          <div class="text-xs text-slate-500 py-1">MACD (12, 26, 9)</div>
+        </div>
+        <div id="macd-container" style="height: 100px;"></div>
+        <!-- RSI Chart -->
+        <div class="px-4 border-t border-slate-700">
+          <div class="text-xs text-slate-500 py-1">RSI (14)</div>
+        </div>
+        <div id="rsi-container" style="height: 100px;"></div>
 
         <!-- Livermore State Bar -->
         <div class="px-4 py-3 border-t border-slate-700">
@@ -140,6 +150,8 @@
     let chart = null;
     let candleSeries = null;
     let volumeSeries = null;
+    let macdChart = null;
+    let rsiChart = null;
     let symbolNames = {};  // {ticker: display_name} mapping
 
     // -----------------------------------------------------------------------
@@ -330,15 +342,73 @@
       }
     }
 
+    // --- Technical Indicator Calculations ---
+    function calcEMA(data, period) {
+      const k = 2 / (period + 1);
+      const ema = [data[0]];
+      for (let i = 1; i < data.length; i++) {
+        ema.push(data[i] * k + ema[i - 1] * (1 - k));
+      }
+      return ema;
+    }
+
+    function calcMACD(closes) {
+      if (closes.length < 26) return { macd: [], signal: [], histogram: [] };
+      const ema12 = calcEMA(closes, 12);
+      const ema26 = calcEMA(closes, 26);
+      const macdLine = ema12.map((v, i) => v - ema26[i]);
+      const signalLine = calcEMA(macdLine, 9);
+      const histogram = macdLine.map((v, i) => v - signalLine[i]);
+      return { macd: macdLine, signal: signalLine, histogram };
+    }
+
+    function calcRSI(closes, period = 14) {
+      const rsi = new Array(closes.length).fill(50);
+      if (closes.length < period + 1) return rsi;
+      let gainSum = 0, lossSum = 0;
+      for (let i = 1; i <= period; i++) {
+        const diff = closes[i] - closes[i - 1];
+        if (diff > 0) gainSum += diff; else lossSum -= diff;
+      }
+      let avgGain = gainSum / period;
+      let avgLoss = lossSum / period;
+      rsi[period] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
+      for (let i = period + 1; i < closes.length; i++) {
+        const diff = closes[i] - closes[i - 1];
+        avgGain = (avgGain * (period - 1) + (diff > 0 ? diff : 0)) / period;
+        avgLoss = (avgLoss * (period - 1) + (diff < 0 ? -diff : 0)) / period;
+        rsi[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
+      }
+      return rsi;
+    }
+
+    // --- Chart options factory ---
+    function makeSubChartOptions(container) {
+      return {
+        width: container.clientWidth,
+        height: container.clientHeight,
+        layout: { background: { type: 'solid', color: '#1e293b' }, textColor: '#64748b', fontSize: 10 },
+        grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#334155' } },
+        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        rightPriceScale: { borderColor: '#475569', scaleMargins: { top: 0.1, bottom: 0.1 } },
+        timeScale: { visible: false },
+      };
+    }
+
     function renderChart(data) {
       const container = document.getElementById('chart-container');
+      const macdContainer = document.getElementById('macd-container');
+      const rsiContainer = document.getElementById('rsi-container');
 
-      // Destroy existing chart
-      if (chart) {
-        chart.remove();
-        chart = null;
-      }
+      // Destroy existing charts
+      if (chart) { chart.remove(); chart = null; }
+      if (macdChart) { macdChart.remove(); macdChart = null; }
+      if (rsiChart) { rsiChart.remove(); rsiChart = null; }
 
+      const ohlcv = data.ohlcv || [];
+      if (!ohlcv.length) return;
+
+      // === Main Chart (Candle + Volume) ===
       chart = LightweightCharts.createChart(container, {
         width: container.clientWidth,
         height: container.clientHeight,
@@ -355,46 +425,78 @@
         timeScale: { borderColor: '#475569', timeVisible: false },
       });
 
-      // Candlestick
       candleSeries = chart.addCandlestickSeries({
-        upColor: '#22c55e',
-        downColor: '#ef4444',
-        borderDownColor: '#ef4444',
-        borderUpColor: '#22c55e',
-        wickDownColor: '#ef4444',
-        wickUpColor: '#22c55e',
+        upColor: '#22c55e', downColor: '#ef4444',
+        borderDownColor: '#ef4444', borderUpColor: '#22c55e',
+        wickDownColor: '#ef4444', wickUpColor: '#22c55e',
       });
-
-      const candles = (data.ohlcv || []).map(d => ({
-        time: d.date,
-        open: d.open,
-        high: d.high,
-        low: d.low,
-        close: d.close,
-      }));
+      const candles = ohlcv.map(d => ({ time: d.date, open: d.open, high: d.high, low: d.low, close: d.close }));
       candleSeries.setData(candles);
 
-      // Volume
-      volumeSeries = chart.addHistogramSeries({
-        priceFormat: { type: 'volume' },
-        priceScaleId: '',
-      });
-      volumeSeries.priceScale().applyOptions({
-        scaleMargins: { top: 0.8, bottom: 0 },
-      });
-
-      const volumes = (data.ohlcv || []).map(d => ({
-        time: d.date,
-        value: d.volume,
+      volumeSeries = chart.addHistogramSeries({ priceFormat: { type: 'volume' }, priceScaleId: '' });
+      volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
+      volumeSeries.setData(ohlcv.map(d => ({
+        time: d.date, value: d.volume,
         color: d.close >= d.open ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)',
-      }));
-      volumeSeries.setData(volumes);
+      })));
 
       chart.timeScale().fitContent();
+
+      // === MACD Chart ===
+      const closes = ohlcv.map(d => d.close);
+      const times = ohlcv.map(d => d.date);
+      const { macd, signal, histogram } = calcMACD(closes);
+
+      macdChart = LightweightCharts.createChart(macdContainer, makeSubChartOptions(macdContainer));
+
+      const macdLineSeries = macdChart.addLineSeries({ color: '#3b82f6', lineWidth: 1.5, priceScaleId: 'macd' });
+      const signalLineSeries = macdChart.addLineSeries({ color: '#f59e0b', lineWidth: 1.5, priceScaleId: 'macd' });
+      const histogramSeries = macdChart.addHistogramSeries({ priceScaleId: 'macd' });
+
+      macdLineSeries.setData(macd.map((v, i) => ({ time: times[i], value: v })));
+      signalLineSeries.setData(signal.map((v, i) => ({ time: times[i], value: v })));
+      histogramSeries.setData(histogram.map((v, i) => ({
+        time: times[i], value: v,
+        color: v >= 0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)',
+      })));
+      macdChart.timeScale().fitContent();
+
+      // === RSI Chart ===
+      const rsiValues = calcRSI(closes, 14);
+
+      rsiChart = LightweightCharts.createChart(rsiContainer, makeSubChartOptions(rsiContainer));
+
+      const rsiLineSeries = rsiChart.addLineSeries({ color: '#a78bfa', lineWidth: 1.5, priceScaleId: 'rsi' });
+      rsiLineSeries.setData(rsiValues.map((v, i) => ({ time: times[i], value: v })));
+
+      // RSI 70/30 기준선
+      const rsi70 = rsiChart.addLineSeries({ color: '#ef4444', lineWidth: 1, lineStyle: 2, priceScaleId: 'rsi' });
+      const rsi30 = rsiChart.addLineSeries({ color: '#22c55e', lineWidth: 1, lineStyle: 2, priceScaleId: 'rsi' });
+      rsi70.setData(times.map(t => ({ time: t, value: 70 })));
+      rsi30.setData(times.map(t => ({ time: t, value: 30 })));
+
+      rsiChart.priceScale('rsi').applyOptions({ scaleMargins: { top: 0.05, bottom: 0.05 } });
+      rsiChart.timeScale().fitContent();
+
+      // === Sync timescales ===
+      chart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+        if (range) {
+          macdChart.timeScale().setVisibleLogicalRange(range);
+          rsiChart.timeScale().setVisibleLogicalRange(range);
+        }
+      });
+      macdChart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+        if (range) {
+          chart.timeScale().setVisibleLogicalRange(range);
+          rsiChart.timeScale().setVisibleLogicalRange(range);
+        }
+      });
 
       // Resize observer
       const ro = new ResizeObserver(() => {
         if (chart) chart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+        if (macdChart) macdChart.applyOptions({ width: macdContainer.clientWidth, height: macdContainer.clientHeight });
+        if (rsiChart) rsiChart.applyOptions({ width: rsiContainer.clientWidth, height: rsiContainer.clientHeight });
       });
       ro.observe(container);
     }
