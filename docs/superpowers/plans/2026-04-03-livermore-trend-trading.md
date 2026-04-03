@@ -58,7 +58,7 @@
 - Create: `config/settings.yaml`
 - Create: `config/.env.example`
 
-- [ ] **Step 1: Create requirements.txt**
+- [x] **Step 1: Create requirements.txt**
 
 ```
 flask==3.1.*
@@ -73,7 +73,7 @@ apscheduler==3.10.*
 pytest==8.*
 ```
 
-- [ ] **Step 2: Create config/settings.yaml**
+- [x] **Step 2: Create config/settings.yaml**
 
 ```yaml
 markets:
@@ -135,7 +135,7 @@ Create empty `__init__.py` in: `db/`, `collectors/`, `livermore_engine/`, `signa
 
 Run: `cd /Users/youngho/Documents/Project/Trend_Trading && pip install -r requirements.txt`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (d200ede)
 
 ```bash
 git add requirements.txt config/ db/__init__.py collectors/__init__.py livermore_engine/__init__.py signals/__init__.py web/__init__.py tests/__init__.py
@@ -153,7 +153,7 @@ git commit -m "feat: project scaffold with dependencies and config"
 - Create: `tests/conftest.py`
 - Create: `tests/test_models.py`
 
-- [ ] **Step 1: Write tests/conftest.py with shared fixtures**
+- [x] **Step 1: Write tests/conftest.py with shared fixtures**
 
 ```python
 import pytest
@@ -193,7 +193,7 @@ def sample_ohlcv_data():
     return pd.DataFrame(data)
 ```
 
-- [ ] **Step 2: Write tests/test_models.py**
+- [x] **Step 2: Write tests/test_models.py**
 
 ```python
 from datetime import date, datetime
@@ -278,12 +278,12 @@ def test_price_unique_constraint(db_session):
         db_session.commit()
 ```
 
-- [ ] **Step 3: Run tests to verify they fail**
+- [x] **Step 3: Run tests to verify they fail**
 
 Run: `cd /Users/youngho/Documents/Project/Trend_Trading && python -m pytest tests/test_models.py -v`
 Expected: FAIL (ModuleNotFoundError: No module named 'db.models')
 
-- [ ] **Step 4: Write db/database.py**
+- [x] **Step 4: Write db/database.py**
 
 ```python
 import os
@@ -318,7 +318,7 @@ def init_db():
     Base.metadata.create_all(get_engine())
 ```
 
-- [ ] **Step 5: Write db/models.py**
+- [x] **Step 5: Write db/models.py**
 
 ```python
 from datetime import date, datetime
@@ -459,7 +459,7 @@ class Portfolio(Base):
     )
 ```
 
-- [ ] **Step 6: Write db/repository.py**
+- [x] **Step 6: Write db/repository.py**
 
 ```python
 from datetime import date
@@ -577,12 +577,12 @@ def get_latest_livermore_state(session: Session, symbol: str) -> Optional[Liverm
     ).order_by(LivermoreState.date.desc()).first()
 ```
 
-- [ ] **Step 7: Run tests to verify they pass**
+- [x] **Step 7: Run tests to verify they pass**
 
 Run: `cd /Users/youngho/Documents/Project/Trend_Trading && python -m pytest tests/test_models.py -v`
 Expected: All 6 tests PASS
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add db/ tests/conftest.py tests/test_models.py
@@ -597,7 +597,7 @@ git commit -m "feat: database models, repository, and model tests"
 - Create: `livermore_engine/market_key.py`
 - Create: `tests/test_market_key.py`
 
-- [ ] **Step 1: Write tests/test_market_key.py**
+- [x] **Step 1: Write tests/test_market_key.py**
 
 ```python
 import pandas as pd
@@ -701,12 +701,12 @@ def test_output_columns():
     assert expected_cols == set(result.columns)
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `python -m pytest tests/test_market_key.py -v`
 Expected: FAIL (ModuleNotFoundError)
 
-- [ ] **Step 3: Write livermore_engine/market_key.py**
+- [x] **Step 3: Write livermore_engine/market_key.py**
 
 ```python
 import pandas as pd
@@ -875,12 +875,12 @@ class MarketKey:
         return pd.DataFrame(states)
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `python -m pytest tests/test_market_key.py -v`
 Expected: All 8 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add livermore_engine/market_key.py tests/test_market_key.py
@@ -895,7 +895,7 @@ git commit -m "feat: Livermore Market Key 6-state analysis engine"
 - Create: `livermore_engine/pivot_points.py`
 - Create: `tests/test_pivot_points.py`
 
-- [ ] **Step 1: Write tests/test_pivot_points.py**
+- [x] **Step 1: Write tests/test_pivot_points.py**
 
 ```python
 import pandas as pd
@@ -992,12 +992,12 @@ def test_output_columns():
     assert expected == set(result.columns)
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `python -m pytest tests/test_pivot_points.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Write livermore_engine/pivot_points.py**
+- [x] **Step 3: Write livermore_engine/pivot_points.py**
 
 ```python
 import pandas as pd
@@ -1104,12 +1104,12 @@ class PivotDetector:
         }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `python -m pytest tests/test_pivot_points.py -v`
 Expected: All 8 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add livermore_engine/pivot_points.py tests/test_pivot_points.py
@@ -1124,7 +1124,7 @@ git commit -m "feat: pivot point detection with false breakout filtering"
 - Create: `livermore_engine/volume_analysis.py`
 - Create: `tests/test_volume_analysis.py`
 
-- [ ] **Step 1: Write tests/test_volume_analysis.py**
+- [x] **Step 1: Write tests/test_volume_analysis.py**
 
 ```python
 import pandas as pd
@@ -1186,12 +1186,12 @@ def test_output_columns():
     assert expected == set(result.columns)
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `python -m pytest tests/test_volume_analysis.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Write livermore_engine/volume_analysis.py**
+- [x] **Step 3: Write livermore_engine/volume_analysis.py**
 
 ```python
 import pandas as pd
@@ -1260,12 +1260,12 @@ class VolumeAnalyzer:
         return pd.DataFrame(results)
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `python -m pytest tests/test_volume_analysis.py -v`
 Expected: All 5 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add livermore_engine/volume_analysis.py tests/test_volume_analysis.py
@@ -1280,7 +1280,7 @@ git commit -m "feat: volume analysis with surge, divergence, and climax detectio
 - Create: `livermore_engine/trend_analyzer.py`
 - Create: `livermore_engine/money_management.py`
 
-- [ ] **Step 1: Write livermore_engine/trend_analyzer.py**
+- [x] **Step 1: Write livermore_engine/trend_analyzer.py**
 
 ```python
 from dataclasses import dataclass
@@ -1339,7 +1339,7 @@ class TrendAnalyzer:
         return True
 ```
 
-- [ ] **Step 2: Write livermore_engine/money_management.py**
+- [x] **Step 2: Write livermore_engine/money_management.py**
 
 ```python
 from dataclasses import dataclass
@@ -1407,7 +1407,7 @@ class MoneyManager:
         return round(entry_price + (risk * risk_reward_ratio), 2)
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add livermore_engine/trend_analyzer.py livermore_engine/money_management.py
@@ -1424,7 +1424,7 @@ git commit -m "feat: trend analyzer (top-down) and money management"
 - Create: `collectors/us_collector.py`
 - Create: `collectors/market_collector.py`
 
-- [ ] **Step 1: Write collectors/base.py**
+- [x] **Step 1: Write collectors/base.py**
 
 ```python
 import logging
@@ -1494,7 +1494,7 @@ class BaseCollector(ABC):
                 time.sleep(delay)
 ```
 
-- [ ] **Step 2: Write collectors/us_collector.py**
+- [x] **Step 2: Write collectors/us_collector.py**
 
 ```python
 import logging
@@ -1539,7 +1539,7 @@ class USCollector(BaseCollector):
         return self.watchlist
 ```
 
-- [ ] **Step 3: Write collectors/kr_collector.py**
+- [x] **Step 3: Write collectors/kr_collector.py**
 
 ```python
 import logging
@@ -1603,7 +1603,7 @@ class KRCollector(BaseCollector):
         return self.watchlist
 ```
 
-- [ ] **Step 4: Write collectors/market_collector.py**
+- [x] **Step 4: Write collectors/market_collector.py**
 
 ```python
 import logging
@@ -1656,7 +1656,7 @@ class MarketCollector:
         return data
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add collectors/
@@ -1672,7 +1672,7 @@ git commit -m "feat: data collectors (KR/US) with validation and retry"
 - Create: `signals/signal_history.py`
 - Create: `tests/test_signal_generator.py`
 
-- [ ] **Step 1: Write tests/test_signal_generator.py**
+- [x] **Step 1: Write tests/test_signal_generator.py**
 
 ```python
 import pandas as pd
@@ -1771,12 +1771,12 @@ def test_signal_priority_ordering():
     assert sorted_signals[2]["symbol"] == "C"  # lower confidence
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `python -m pytest tests/test_signal_generator.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Write signals/signal_generator.py**
+- [x] **Step 3: Write signals/signal_generator.py**
 
 ```python
 import logging
@@ -1932,7 +1932,7 @@ class SignalGenerator:
         ))
 ```
 
-- [ ] **Step 4: Write signals/signal_history.py**
+- [x] **Step 4: Write signals/signal_history.py**
 
 ```python
 import logging
@@ -1997,12 +1997,12 @@ class SignalHistory:
             return future_price.close < signal.price
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `python -m pytest tests/test_signal_generator.py -v`
 Expected: All 6 tests PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add signals/ tests/test_signal_generator.py
@@ -2016,7 +2016,7 @@ git commit -m "feat: signal generator with confidence scoring and priority"
 **Files:**
 - Create: `signals/telegram_notifier.py`
 
-- [ ] **Step 1: Write signals/telegram_notifier.py**
+- [x] **Step 1: Write signals/telegram_notifier.py**
 
 ```python
 import os
@@ -2080,7 +2080,7 @@ class TelegramNotifier:
             logger.error(f"Telegram send failed: {e}")
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add signals/telegram_notifier.py
@@ -2095,7 +2095,7 @@ git commit -m "feat: Telegram notifier for signal alerts"
 - Create: `update_all.py`
 - Create: `tests/test_pipeline.py`
 
-- [ ] **Step 1: Write update_all.py**
+- [x] **Step 1: Write update_all.py**
 
 ```python
 #!/usr/bin/env python3
@@ -2332,7 +2332,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Write tests/test_pipeline.py**
+- [x] **Step 2: Write tests/test_pipeline.py**
 
 ```python
 """Integration test: end-to-end pipeline with mock data."""
@@ -2418,12 +2418,12 @@ def test_phase3_produces_signals(integration_db):
     assert isinstance(signals, list)
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 Run: `python -m pytest tests/test_pipeline.py -v`
 Expected: All tests PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add update_all.py tests/test_pipeline.py
@@ -2437,7 +2437,7 @@ git commit -m "feat: main pipeline (update_all.py) with 4-phase execution"
 **Files:**
 - Create: `web/app.py`
 
-- [ ] **Step 1: Write web/app.py**
+- [x] **Step 1: Write web/app.py**
 
 ```python
 from datetime import date, timedelta
@@ -2608,7 +2608,7 @@ if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5002, debug=True)
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add web/app.py
@@ -2622,7 +2622,7 @@ git commit -m "feat: Flask web app with API endpoints for dashboard and performa
 **Files:**
 - Create: `web/templates/index.html`
 
-- [ ] **Step 1: Write web/templates/index.html**
+- [x] **Step 1: Write web/templates/index.html**
 
 This is a large single-page template. The full HTML file should include:
 - Navigation bar with market toggle (KR/US) and submenu (dashboard/performance)
@@ -2641,7 +2641,7 @@ Due to the length of this file (~400 lines of HTML/JS), the implementing agent s
 - Fetch API for all data loading
 - The exact layout from the `ui-dashboard-v2.html` mockup
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add web/templates/index.html
@@ -2655,7 +2655,7 @@ git commit -m "feat: main dashboard frontend with charts and signal display"
 **Files:**
 - Create: `web/templates/performance.html`
 
-- [ ] **Step 1: Write web/templates/performance.html**
+- [x] **Step 1: Write web/templates/performance.html**
 
 Build following the `ui-performance.html` mockup:
 - Same navigation bar as index.html
@@ -2667,7 +2667,7 @@ Build following the `ui-performance.html` mockup:
 - Signal accuracy stats with progress bars
 - All data from `/api/<market>/performance`
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add web/templates/performance.html
@@ -2681,12 +2681,12 @@ git commit -m "feat: performance tracking frontend with equity curve and stats"
 **Files:**
 - Modify: `web/app.py` (if needed)
 
-- [ ] **Step 1: Run all tests**
+- [x] **Step 1: Run all tests**
 
 Run: `python -m pytest tests/ -v`
 Expected: All tests PASS
 
-- [ ] **Step 2: Initialize DB and verify Flask starts**
+- [x] **Step 2: Initialize DB and verify Flask starts**
 
 ```bash
 cd /Users/youngho/Documents/Project/Trend_Trading
@@ -2697,14 +2697,14 @@ curl -s http://localhost:5002/kr/dashboard | head -20
 kill %1
 ```
 
-- [ ] **Step 3: Run pipeline with --phase 1 for smoke test**
+- [x] **Step 3: Run pipeline with --phase 1 for smoke test**
 
 ```bash
 python update_all.py --market us --phase 1 --days 30
 ```
 Expected: US stock data collected and saved to DB
 
-- [ ] **Step 4: Add .gitignore**
+- [x] **Step 4: Add .gitignore**
 
 ```
 config/.env
@@ -2714,7 +2714,7 @@ __pycache__/
 .superpowers/
 ```
 
-- [ ] **Step 5: Final commit**
+- [x] **Step 5: Final commit**
 
 ```bash
 git add .gitignore
