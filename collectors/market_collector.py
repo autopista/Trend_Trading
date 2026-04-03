@@ -134,20 +134,20 @@ class MarketCollector:
                 logger.exception("[%s] Failed to fetch %s", market_name, symbol)
                 failed.append(symbol)
 
-        # Determine index list from the collector
+        # Fetch indices — always use USCollector (yfinance) for reliability
+        # pykrx index API is unstable; KR indices like ^KS11/^KQ11 work via yfinance
         index_list: list[str] = getattr(collector, "indices", [])
         for idx_ticker in index_list:
             display_name = self.index_name_map.get(idx_ticker, idx_ticker)
             logger.info("[%s] Fetching index: %s (%s)", market_name, display_name, idx_ticker)
             try:
-                df = collector.fetch_index(idx_ticker, start_date, end_date)
+                df = self.us_collector.fetch_ohlcv(idx_ticker, start_date, end_date)
                 if df.empty:
                     logger.warning(
                         "[%s] Empty index data for %s", market_name, display_name
                     )
                     failed.append(idx_ticker)
                 else:
-                    # Store under the display name so DB gets human-readable names
                     indices[display_name] = df
             except Exception:
                 logger.exception(

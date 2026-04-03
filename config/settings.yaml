@@ -12,9 +12,9 @@ markets:
       - ticker: "006400"
         name: "삼성SDI"
     indices:
-      - ticker: "1001"
+      - ticker: "^KS11"
         name: "KOSPI"
-      - ticker: "2001"
+      - ticker: "^KQ11"
         name: "KOSDAQ"
   us:
     watchlist:
