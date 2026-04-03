@@ -17,8 +17,12 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import yaml
+from dotenv import load_dotenv
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 from sqlalchemy import and_, select, func
+
+# Load .env before anything else
+load_dotenv(Path(__file__).parent.parent / "config" / ".env")
 
 from db.database import get_session, init_db
 from db.models import LivermoreState, MarketIndex, Price, Signal, Trade
