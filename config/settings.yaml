@@ -1,58 +1,1939 @@
 markets:
   kr:
     watchlist:
-      - ticker: "005930"
-        name: "삼성전자"
-      - ticker: "000660"
-        name: "SK하이닉스"
-      - ticker: "035420"
-        name: "NAVER"
-      - ticker: "051910"
-        name: "LG화학"
-      - ticker: "006400"
-        name: "삼성SDI"
+    - ticker: 005930
+      name: 삼성전자
+    - ticker: '000660'
+      name: SK하이닉스
+    - ticker: 005935
+      name: 삼성전자우
+    - ticker: 005380
+      name: 현대차
+    - ticker: '373220'
+      name: LG에너지솔루션
+    - ticker: '012450'
+      name: 한화에어로스페이스
+    - ticker: '207940'
+      name: 삼성바이오로직스
+    - ticker: '402340'
+      name: SK스퀘어
+    - ticker: '034020'
+      name: 두산에너빌리티
+    - ticker: '000270'
+      name: 기아
+    - ticker: '105560'
+      name: KB금융
+    - ticker: '329180'
+      name: HD현대중공업
+    - ticker: 068270
+      name: 셀트리온
+    - ticker: 032830
+      name: 삼성생명
+    - ticker: '055550'
+      name: 신한지주
+    - ticker: 028260
+      name: 삼성물산
+    - ticker: '042660'
+      name: 한화오션
+    - ticker: '006400'
+      name: 삼성SDI
+    - ticker: '012330'
+      name: 현대모비스
+    - ticker: 006800
+      name: 미래에셋증권
+    - ticker: 009150
+      name: 삼성전기
+    - ticker: '267260'
+      name: HD현대일렉트릭
+    - ticker: '035420'
+      name: NAVER
+    - ticker: '010130'
+      name: 고려아연
+    - ticker: 086790
+      name: 하나금융지주
+    - ticker: 005490
+      name: POSCO홀딩스
+    - ticker: 009540
+      name: HD한국조선해양
+    - ticker: '015760'
+      name: 한국전력
+    - ticker: '272210'
+      name: 한화시스템
+    - ticker: '042700'
+      name: 한미반도체
+    - ticker: '010140'
+      name: 삼성중공업
+    - ticker: '298040'
+      name: 효성중공업
+    - ticker: '316140'
+      name: 우리금융지주
+    - ticker: '010120'
+      name: LS ELECTRIC
+    - ticker: '064350'
+      name: 현대로템
+    - ticker: '034730'
+      name: SK
+    - ticker: 051910
+      name: LG화학
+    - ticker: 000810
+      name: 삼성화재
+    - ticker: '035720'
+      name: 카카오
+    - ticker: 096770
+      name: SK이노베이션
+    - ticker: '267250'
+      name: HD현대
+    - ticker: '138040'
+      name: 메리츠금융지주
+    - ticker: 079550
+      name: LIG넥스원
+    - ticker: '011200'
+      name: HMM
+    - ticker: '003670'
+      name: 포스코퓨처엠
+    - ticker: 033780
+      name: KT&G
+    - ticker: 047810
+      name: 한국항공우주
+    - ticker: '066570'
+      name: LG전자
+    - ticker: 069500
+      name: KODEX 200
+    - ticker: '017670'
+      name: SK텔레콤
+    - ticker: '000150'
+      name: 두산
+    - ticker: '024110'
+      name: 기업은행
+    - ticker: '000720'
+      name: 현대건설
+    - ticker: 086280
+      name: 현대글로비스
+    - ticker: '360750'
+      name: TIGER 미국S&P500
+    - ticker: '030200'
+      name: KT
+    - ticker: '047050'
+      name: 포스코인터내셔널
+    - ticker: '003550'
+      name: LG
+    - ticker: 010950
+      name: S-Oil
+    - ticker: '278470'
+      name: 삼성에피스홀딩스
+    - ticker: '071050'
+      name: 에이피알
+    - ticker: 018260
+      name: 한국금융지주
+    - ticker: '352820'
+      name: 삼성에스디에스
+    - ticker: '259960'
+      name: 하이브
+    - ticker: 005830
+      name: 크래프톤
+    - ticker: '323410'
+      name: DB손해보험
+    - ticker: 039490
+      name: 카카오뱅크
+    - ticker: 005940
+      name: 키움증권
+    - ticker: '307950'
+      name: NH투자증권
+    - ticker: '003230'
+      name: 현대오토에버
+    - ticker: '396500'
+      name: 삼양식품
+    - ticker: 000880
+      name: TIGER 반도체TOP10
+    - ticker: 003490
+      name: 한화
+    - ticker: '006260'
+      name: 대한항공
+    - ticker: '016360'
+      name: LS
+    - ticker: 005387
+      name: 삼성증권
+    - ticker: '133690'
+      name: 현대차2우B
+    - ticker: '443060'
+      name: TIGER 미국나스닥100
+    - ticker: '379800'
+      name: HD현대마린솔루션
+    - ticker: 028050
+      name: KODEX 미국S&P500
+    - ticker: '459580'
+      name: 삼성E&A
+    - ticker: '488770'
+      name: KODEX CD금리액티브(합성)
+    - ticker: 090430
+      name: KODEX 머니마켓액티브
+    - ticker: '011070'
+      name: 아모레퍼시픽
+    - ticker: '007660'
+      name: LG이노텍
+    - ticker: '000100'
+      name: 이수페타시스
+    - ticker: '326030'
+      name: 유한양행
+    - ticker: '180640'
+      name: SK바이오팜
+    - ticker: '102110'
+      name: 한진칼
+    - ticker: '267270'
+      name: TIGER 200
+    - ticker: '047040'
+      name: HD건설기계
+    - ticker: 009830
+      name: 대우건설
+    - ticker: 066970
+      name: 한화솔루션
+    - ticker: '032640'
+      name: 엘앤에프
+    - ticker: '128940'
+      name: LG유플러스
+    - ticker: '377300'
+      name: 한미약품
+    - ticker: '161390'
+      name: 카카오페이
+    - ticker: '229200'
+      name: 한국타이어앤테크놀로지
+    - ticker: 052690
+      name: KODEX 코스닥150
+    - ticker: '196170'
+      name: 알테오젠
+    - ticker: 086520
+      name: 에코프로
+    - ticker: '247540'
+      name: 에코프로비엠
+    - ticker: '000250'
+      name: 삼천당제약
+    - ticker: '277810'
+      name: 레인보우로보틱스
+    - ticker: '298380'
+      name: 에이비엘바이오
+    - ticker: '950160'
+      name: 코오롱티슈진
+    - ticker: 058470
+      name: 리노공업
+    - ticker: 028300
+      name: HLB
+    - ticker: 087010
+      name: 펩트론
+    - ticker: '141080'
+      name: 리가켐바이오
+    - ticker: '214370'
+      name: 케어젠
+    - ticker: '240810'
+      name: 원익IPS
+    - ticker: '310210'
+      name: 보로노이
+    - ticker: 095340
+      name: ISC
+    - ticker: 039030
+      name: 이오테크닉스
+    - ticker: '263750'
+      name: 펄어비스
+    - ticker: 032820
+      name: 우리기술
+    - ticker: '108490'
+      name: 로보티즈
+    - ticker: '403870'
+      name: HPSP
+    - ticker: '214150'
+      name: 클래시스
+    - ticker: '226950'
+      name: 올릭스
+    - ticker: '043260'
+      name: 성호전자
+    - ticker: '319400'
+      name: 에임드바이오
+    - ticker: '214450'
+      name: 현대무벡스
+    - ticker: '347850'
+      name: 파마리서치
+    - ticker: '145020'
+      name: 디앤디파마텍
+    - ticker: '357780'
+      name: 휴젤
+    - ticker: 036930
+      name: 솔브레인
+    - ticker: '237690'
+      name: 주성엔지니어링
+    - ticker: 083650
+      name: 에스티팜
+    - ticker: 084370
+      name: 비에이치아이
+    - ticker: '178320'
+      name: 유진테크
+    - ticker: '140410'
+      name: 서진시스템
+    - ticker: '476830'
+      name: 메지온
+    - ticker: '440110'
+      name: 알지노믹스
+    - ticker: '257720'
+      name: 파두
+    - ticker: 068760
+      name: 실리콘투
+    - ticker: '064760'
+      name: 셀트리온제약
+    - ticker: 005290
+      name: 티씨케이
+    - ticker: '218410'
+      name: 동진쎄미켐
+    - ticker: 058610
+      name: RFHIC
+    - ticker: '347700'
+      name: 에스피지
+    - ticker: '376900'
+      name: 스피어
+    - ticker: '319660'
+      name: 로킷헬스케어
+    - ticker: 035900
+      name: 피에스케이
+    - ticker: '030530'
+      name: JYP Ent.
+    - ticker: 031980
+      name: 원익홀딩스
+    - ticker: '010170'
+      name: 피에스케이홀딩스
+    - ticker: '041510'
+      name: 에스엠
+    - ticker: '067310'
+      name: 하나마이크론
+    - ticker: 078600
+      name: 대주전자재료
+    - ticker: 039200
+      name: 오스코텍
+    - ticker: '222800'
+      name: 심텍
+    - ticker: 082920
+      name: 비츠로셀
+    - ticker: 099320
+      name: 쎄트렉아이
+    - ticker: '131970'
+      name: 두산테스나
+    - ticker: 098460
+      name: 고영
+    - ticker: 089030
+      name: 테크윙
+    - ticker: '475830'
+      name: 오름테라퓨틱
+    - ticker: '437730'
+      name: 삼현
+    - ticker: '101490'
+      name: 에스앤에스텍
+    - ticker: '140860'
+      name: 파크시스템스
+    - ticker: '491000'
+      name: 리브스메드
+    - ticker: '290650'
+      name: 엘앤씨바이오
+    - ticker: 085660
+      name: 차바이오텍
+    - ticker: '323280'
+      name: 태성
+    - ticker: '060370'
+      name: LS마린솔루션
+    - ticker: 038500
+      name: 삼표시멘트
+    - ticker: 003380
+      name: 하림지주
+    - ticker: '065350'
+      name: 신성델타테크
+    - ticker: '100790'
+      name: 미래에셋벤처투자
+    - ticker: '417200'
+      name: LS머트리얼즈
+    - ticker: '127120'
+      name: 제이에스링크
+    - ticker: '232140'
+      name: 와이씨
+    - ticker: '195940'
+      name: HK이노엔
+    - ticker: 080220
+      name: 제주반도체
+    - ticker: '115180'
+      name: 큐리언트
+    - ticker: '445680'
+      name: 큐리옥스바이오시스템즈
+    - ticker: 090710
+      name: 휴림로봇
+    - ticker: '466100'
+      name: 클로봇
+    - ticker: 082270
+      name: 젬백스
+    - ticker: 048410
+      name: 현대바이오
+    - ticker: '281740'
+      name: 레이크머티리얼즈
+    - ticker: '189300'
+      name: 인텔리안테크
+    - ticker: 086450
+      name: 동국제약
+    - ticker: '131290'
+      name: 티에스이
+    - ticker: '397030'
+      name: 에이프릴바이오
+    - ticker: '183300'
+      name: 코미코
+    - ticker: '032500'
+      name: 케이엠더블유
+    - ticker: '035760'
+      name: CJ ENM
+    - ticker: 096530
+      name: 씨젠
+    - ticker: 095610
+      name: 테스
+    - ticker: '388210'
+      name: 씨엠티엑스
+    - ticker: '174900'
+      name: 앱클론
+    - ticker: '137400'
+      name: 피엔티
+    - ticker: '456160'
+      name: 지투지바이오
+    - ticker: 007390
+      name: 네이처셀
+    - ticker: '213420'
+      name: 덕산네오룩스
+    - ticker: '166090'
+      name: 하나머티리얼즈
+    - ticker: '052020'
+      name: 에스티큐브
+    - ticker: '124500'
+      name: 아이티센글로벌
+    - ticker: '027360'
+      name: 아주IB투자
+    - ticker: '023160'
+      name: 태광
+    - ticker: '293490'
+      name: 카카오게임즈
+    - ticker: '036540'
+      name: SFA반도체
+    - ticker: '420770'
+      name: 기가비스
+    - ticker: '295310'
+      name: 에이치브이엠
+    - ticker: '014620'
+      name: 성광벤드
+    - ticker: '160190'
+      name: 하이젠알앤엠
+    - ticker: '253450'
+      name: 스튜디오드래곤
+    - ticker: 044490
+      name: 태웅
+    - ticker: 089970
+      name: 브이엠
+    - ticker: '388720'
+      name: 유일로보틱스
+    - ticker: 050890
+      name: 쏠리드
+    - ticker: 036830
+      name: 솔브레인홀딩스
+    - ticker: 056190
+      name: 에스에프에이
+    - ticker: '328130'
+      name: 루닛
+    - ticker: '122870'
+      name: 와이지엔터테인먼트
+    - ticker: 056080
+      name: 유진로봇
+    - ticker: '476060'
+      name: 온코닉테라퓨틱스
+    - ticker: '222080'
+      name: 씨아이에스
+    - ticker: '204270'
+      name: 제이앤티씨
+    - ticker: '161580'
+      name: 필옵틱스
+    - ticker: 032190
+      name: 다우데이타
+    - ticker: '171090'
+      name: 선익시스템
+    - ticker: '006730'
+      name: 서부T&D
+    - ticker: '126340'
+      name: 비나텍
+    - ticker: '241710'
+      name: 코스메카코리아
+    - ticker: '389470'
+      name: 인벤티지랩
+    - ticker: '358570'
+      name: 지아이이노베이션
+    - ticker: 036810
+      name: 에프에스티
+    - ticker: '052400'
+      name: 코나아이
+    - ticker: '490470'
+      name: 세미파이브
+    - ticker: '074600'
+      name: 원익QnC
+    - ticker: '033500'
+      name: 동성화인텍
+    - ticker: '121600'
+      name: 나노신소재
+    - ticker: '348370'
+      name: 엔켐
+    - ticker: '200710'
+      name: 에이디테크놀로지
+    - ticker: '368770'
+      name: 파이버프로
+    - ticker: 009520
+      name: 포스코엠텍
+    - ticker: '372320'
+      name: 큐로셀
+    - ticker: '225570'
+      name: 넥슨게임즈
+    - ticker: '486990'
+      name: 노타
+    - ticker: 078160
+      name: 메디포스트
+    - ticker: '365340'
+      name: 성일하이텍
+    - ticker: '475960'
+      name: 토모큐브
+    - ticker: 024850
+      name: HLB이노베이션
+    - ticker: 086900
+      name: 메디톡스
     indices:
-      - ticker: "^KS11"
-        name: "KOSPI"
-      - ticker: "^KQ11"
-        name: "KOSDAQ"
+    - ticker: ^KS11
+      name: KOSPI
+    - ticker: ^KQ11
+      name: KOSDAQ
   us:
     watchlist:
-      - ticker: "AAPL"
-        name: "Apple"
-      - ticker: "MSFT"
-        name: "Microsoft"
-      - ticker: "GOOGL"
-        name: "Alphabet"
-      - ticker: "AMZN"
-        name: "Amazon"
-      - ticker: "NVDA"
-        name: "NVIDIA"
+    - ticker: MMM
+      name: 3M
+    - ticker: AOS
+      name: A. O. Smith
+    - ticker: ABT
+      name: Abbott Laboratories
+    - ticker: ABBV
+      name: AbbVie
+    - ticker: ACN
+      name: Accenture
+    - ticker: ADBE
+      name: Adobe Inc.
+    - ticker: AMD
+      name: Advanced Micro Devices
+    - ticker: AES
+      name: AES Corporation
+    - ticker: AFL
+      name: Aflac
+    - ticker: A
+      name: Agilent Technologies
+    - ticker: APD
+      name: Air Products
+    - ticker: ABNB
+      name: Airbnb
+    - ticker: AKAM
+      name: Akamai Technologies
+    - ticker: ALB
+      name: Albemarle Corporation
+    - ticker: ARE
+      name: Alexandria Real Estate Equities
+    - ticker: ALGN
+      name: Align Technology
+    - ticker: ALLE
+      name: Allegion
+    - ticker: LNT
+      name: Alliant Energy
+    - ticker: ALL
+      name: Allstate
+    - ticker: GOOGL
+      name: Alphabet Inc. (Class A)
+    - ticker: GOOG
+      name: Alphabet Inc. (Class C)
+    - ticker: MO
+      name: Altria
+    - ticker: AMZN
+      name: Amazon
+    - ticker: AMCR
+      name: Amcor
+    - ticker: AEE
+      name: Ameren
+    - ticker: AEP
+      name: American Electric Power
+    - ticker: AXP
+      name: American Express
+    - ticker: AIG
+      name: American International Group
+    - ticker: AMT
+      name: American Tower
+    - ticker: AWK
+      name: American Water Works
+    - ticker: AMP
+      name: Ameriprise Financial
+    - ticker: AME
+      name: Ametek
+    - ticker: AMGN
+      name: Amgen
+    - ticker: APH
+      name: Amphenol
+    - ticker: ADI
+      name: Analog Devices
+    - ticker: AON
+      name: Aon plc
+    - ticker: APA
+      name: APA Corporation
+    - ticker: APO
+      name: Apollo Global Management
+    - ticker: AAPL
+      name: Apple Inc.
+    - ticker: AMAT
+      name: Applied Materials
+    - ticker: APP
+      name: AppLovin
+    - ticker: APTV
+      name: Aptiv
+    - ticker: ACGL
+      name: Arch Capital Group
+    - ticker: ADM
+      name: Archer Daniels Midland
+    - ticker: ARES
+      name: Ares Management
+    - ticker: ANET
+      name: Arista Networks
+    - ticker: AJG
+      name: Arthur J. Gallagher & Co.
+    - ticker: AIZ
+      name: Assurant
+    - ticker: T
+      name: AT&T
+    - ticker: ATO
+      name: Atmos Energy
+    - ticker: ADSK
+      name: Autodesk
+    - ticker: ADP
+      name: Automatic Data Processing
+    - ticker: AZO
+      name: AutoZone
+    - ticker: AVB
+      name: AvalonBay Communities
+    - ticker: AVY
+      name: Avery Dennison
+    - ticker: AXON
+      name: Axon Enterprise
+    - ticker: BKR
+      name: Baker Hughes
+    - ticker: BALL
+      name: Ball Corporation
+    - ticker: BAC
+      name: Bank of America
+    - ticker: BAX
+      name: Baxter International
+    - ticker: BDX
+      name: Becton Dickinson
+    - ticker: BRK-B
+      name: Berkshire Hathaway
+    - ticker: BBY
+      name: Best Buy
+    - ticker: TECH
+      name: Bio-Techne
+    - ticker: BIIB
+      name: Biogen
+    - ticker: BLK
+      name: BlackRock
+    - ticker: BX
+      name: Blackstone Inc.
+    - ticker: XYZ
+      name: Block, Inc.
+    - ticker: BK
+      name: BNY Mellon
+    - ticker: BA
+      name: Boeing
+    - ticker: BKNG
+      name: Booking Holdings
+    - ticker: BSX
+      name: Boston Scientific
+    - ticker: BMY
+      name: Bristol Myers Squibb
+    - ticker: AVGO
+      name: Broadcom
+    - ticker: BR
+      name: Broadridge Financial Solutions
+    - ticker: BRO
+      name: Brown & Brown
+    - ticker: BF-B
+      name: Brown–Forman
+    - ticker: BLDR
+      name: Builders FirstSource
+    - ticker: BG
+      name: Bunge Global
+    - ticker: BXP
+      name: BXP, Inc.
+    - ticker: CHRW
+      name: C.H. Robinson
+    - ticker: CDNS
+      name: Cadence Design Systems
+    - ticker: CPT
+      name: Camden Property Trust
+    - ticker: CPB
+      name: Campbell's Company (The)
+    - ticker: COF
+      name: Capital One
+    - ticker: CAH
+      name: Cardinal Health
+    - ticker: CCL
+      name: Carnival
+    - ticker: CARR
+      name: Carrier Global
+    - ticker: CVNA
+      name: Carvana
+    - ticker: CAT
+      name: Caterpillar Inc.
+    - ticker: CBOE
+      name: Cboe Global Markets
+    - ticker: CBRE
+      name: CBRE Group
+    - ticker: CDW
+      name: CDW Corporation
+    - ticker: COR
+      name: Cencora
+    - ticker: CNC
+      name: Centene Corporation
+    - ticker: CNP
+      name: CenterPoint Energy
+    - ticker: CF
+      name: CF Industries
+    - ticker: CRL
+      name: Charles River Laboratories
+    - ticker: SCHW
+      name: Charles Schwab Corporation
+    - ticker: CHTR
+      name: Charter Communications
+    - ticker: CVX
+      name: Chevron Corporation
+    - ticker: CMG
+      name: Chipotle Mexican Grill
+    - ticker: CB
+      name: Chubb Limited
+    - ticker: CHD
+      name: Church & Dwight
+    - ticker: CIEN
+      name: Ciena
+    - ticker: CI
+      name: Cigna
+    - ticker: CINF
+      name: Cincinnati Financial
+    - ticker: CTAS
+      name: Cintas
+    - ticker: CSCO
+      name: Cisco
+    - ticker: C
+      name: Citigroup
+    - ticker: CFG
+      name: Citizens Financial Group
+    - ticker: CLX
+      name: Clorox
+    - ticker: CME
+      name: CME Group
+    - ticker: CMS
+      name: CMS Energy
+    - ticker: KO
+      name: Coca-Cola Company (The)
+    - ticker: CTSH
+      name: Cognizant
+    - ticker: COHR
+      name: Coherent Corp.
+    - ticker: COIN
+      name: Coinbase
+    - ticker: CL
+      name: Colgate-Palmolive
+    - ticker: CMCSA
+      name: Comcast
+    - ticker: FIX
+      name: Comfort Systems USA
+    - ticker: CAG
+      name: Conagra Brands
+    - ticker: COP
+      name: ConocoPhillips
+    - ticker: ED
+      name: Consolidated Edison
+    - ticker: STZ
+      name: Constellation Brands
+    - ticker: CEG
+      name: Constellation Energy
+    - ticker: COO
+      name: Cooper Companies (The)
+    - ticker: CPRT
+      name: Copart
+    - ticker: GLW
+      name: Corning Inc.
+    - ticker: CPAY
+      name: Corpay
+    - ticker: CTVA
+      name: Corteva
+    - ticker: CSGP
+      name: CoStar Group
+    - ticker: COST
+      name: Costco
+    - ticker: CTRA
+      name: Coterra
+    - ticker: CRH
+      name: CRH plc
+    - ticker: CRWD
+      name: CrowdStrike
+    - ticker: CCI
+      name: Crown Castle
+    - ticker: CSX
+      name: CSX Corporation
+    - ticker: CMI
+      name: Cummins
+    - ticker: CVS
+      name: CVS Health
+    - ticker: DHR
+      name: Danaher Corporation
+    - ticker: DRI
+      name: Darden Restaurants
+    - ticker: DDOG
+      name: Datadog
+    - ticker: DVA
+      name: DaVita
+    - ticker: DECK
+      name: Deckers Brands
+    - ticker: DE
+      name: Deere & Company
+    - ticker: DELL
+      name: Dell Technologies
+    - ticker: DAL
+      name: Delta Air Lines
+    - ticker: DVN
+      name: Devon Energy
+    - ticker: DXCM
+      name: Dexcom
+    - ticker: FANG
+      name: Diamondback Energy
+    - ticker: DLR
+      name: Digital Realty
+    - ticker: DG
+      name: Dollar General
+    - ticker: DLTR
+      name: Dollar Tree
+    - ticker: D
+      name: Dominion Energy
+    - ticker: DPZ
+      name: Domino's
+    - ticker: DASH
+      name: DoorDash
+    - ticker: DOV
+      name: Dover Corporation
+    - ticker: DOW
+      name: Dow Inc.
+    - ticker: DHI
+      name: D. R. Horton
+    - ticker: DTE
+      name: DTE Energy
+    - ticker: DUK
+      name: Duke Energy
+    - ticker: DD
+      name: DuPont
+    - ticker: ETN
+      name: Eaton Corporation
+    - ticker: EBAY
+      name: eBay Inc.
+    - ticker: SATS
+      name: EchoStar
+    - ticker: ECL
+      name: Ecolab
+    - ticker: EIX
+      name: Edison International
+    - ticker: EW
+      name: Edwards Lifesciences
+    - ticker: EA
+      name: Electronic Arts
+    - ticker: ELV
+      name: Elevance Health
+    - ticker: EME
+      name: Emcor
+    - ticker: EMR
+      name: Emerson Electric
+    - ticker: ETR
+      name: Entergy
+    - ticker: EOG
+      name: EOG Resources
+    - ticker: EPAM
+      name: EPAM Systems
+    - ticker: EQT
+      name: EQT Corporation
+    - ticker: EFX
+      name: Equifax
+    - ticker: EQIX
+      name: Equinix
+    - ticker: EQR
+      name: Equity Residential
+    - ticker: ERIE
+      name: Erie Indemnity
+    - ticker: ESS
+      name: Essex Property Trust
+    - ticker: EL
+      name: Estée Lauder Companies (The)
+    - ticker: EG
+      name: Everest Group
+    - ticker: EVRG
+      name: Evergy
+    - ticker: ES
+      name: Eversource Energy
+    - ticker: EXC
+      name: Exelon
+    - ticker: EXE
+      name: Expand Energy
+    - ticker: EXPE
+      name: Expedia Group
+    - ticker: EXPD
+      name: Expeditors International
+    - ticker: EXR
+      name: Extra Space Storage
+    - ticker: XOM
+      name: ExxonMobil
+    - ticker: FFIV
+      name: F5, Inc.
+    - ticker: FDS
+      name: FactSet
+    - ticker: FICO
+      name: Fair Isaac
+    - ticker: FAST
+      name: Fastenal
+    - ticker: FRT
+      name: Federal Realty Investment Trust
+    - ticker: FDX
+      name: FedEx
+    - ticker: FIS
+      name: Fidelity National Information Services
+    - ticker: FITB
+      name: Fifth Third Bancorp
+    - ticker: FSLR
+      name: First Solar
+    - ticker: FE
+      name: FirstEnergy
+    - ticker: FISV
+      name: Fiserv
+    - ticker: F
+      name: Ford Motor Company
+    - ticker: FTNT
+      name: Fortinet
+    - ticker: FTV
+      name: Fortive
+    - ticker: FOXA
+      name: Fox Corporation (Class A)
+    - ticker: FOX
+      name: Fox Corporation (Class B)
+    - ticker: BEN
+      name: Franklin Resources
+    - ticker: FCX
+      name: Freeport-McMoRan
+    - ticker: GRMN
+      name: Garmin
+    - ticker: IT
+      name: Gartner
+    - ticker: GE
+      name: GE Aerospace
+    - ticker: GEHC
+      name: GE HealthCare
+    - ticker: GEV
+      name: GE Vernova
+    - ticker: GEN
+      name: Gen Digital
+    - ticker: GNRC
+      name: Generac
+    - ticker: GD
+      name: General Dynamics
+    - ticker: GIS
+      name: General Mills
+    - ticker: GM
+      name: General Motors
+    - ticker: GPC
+      name: Genuine Parts Company
+    - ticker: GILD
+      name: Gilead Sciences
+    - ticker: GPN
+      name: Global Payments
+    - ticker: GL
+      name: Globe Life
+    - ticker: GDDY
+      name: GoDaddy
+    - ticker: GS
+      name: Goldman Sachs
+    - ticker: HAL
+      name: Halliburton
+    - ticker: HIG
+      name: Hartford (The)
+    - ticker: HAS
+      name: Hasbro
+    - ticker: HCA
+      name: HCA Healthcare
+    - ticker: DOC
+      name: Healthpeak Properties
+    - ticker: HSIC
+      name: Henry Schein
+    - ticker: HSY
+      name: Hershey Company (The)
+    - ticker: HPE
+      name: Hewlett Packard Enterprise
+    - ticker: HLT
+      name: Hilton Worldwide
+    - ticker: HOLX
+      name: Hologic
+    - ticker: HD
+      name: Home Depot (The)
+    - ticker: HON
+      name: Honeywell
+    - ticker: HRL
+      name: Hormel Foods
+    - ticker: HST
+      name: Host Hotels & Resorts
+    - ticker: HWM
+      name: Howmet Aerospace
+    - ticker: HPQ
+      name: HP Inc.
+    - ticker: HUBB
+      name: Hubbell Incorporated
+    - ticker: HUM
+      name: Humana
+    - ticker: HBAN
+      name: Huntington Bancshares
+    - ticker: HII
+      name: Huntington Ingalls Industries
+    - ticker: IBM
+      name: IBM
+    - ticker: IEX
+      name: IDEX Corporation
+    - ticker: IDXX
+      name: Idexx Laboratories
+    - ticker: ITW
+      name: Illinois Tool Works
+    - ticker: INCY
+      name: Incyte
+    - ticker: IR
+      name: Ingersoll Rand
+    - ticker: PODD
+      name: Insulet Corporation
+    - ticker: INTC
+      name: Intel
+    - ticker: IBKR
+      name: Interactive Brokers
+    - ticker: ICE
+      name: Intercontinental Exchange
+    - ticker: IFF
+      name: International Flavors & Fragrances
+    - ticker: IP
+      name: International Paper
+    - ticker: INTU
+      name: Intuit
+    - ticker: ISRG
+      name: Intuitive Surgical
+    - ticker: IVZ
+      name: Invesco
+    - ticker: INVH
+      name: Invitation Homes
+    - ticker: IQV
+      name: IQVIA
+    - ticker: IRM
+      name: Iron Mountain
+    - ticker: JBHT
+      name: J.B. Hunt
+    - ticker: JBL
+      name: Jabil
+    - ticker: JKHY
+      name: Jack Henry & Associates
+    - ticker: J
+      name: Jacobs Solutions
+    - ticker: JNJ
+      name: Johnson & Johnson
+    - ticker: JCI
+      name: Johnson Controls
+    - ticker: JPM
+      name: JPMorgan Chase
+    - ticker: KVUE
+      name: Kenvue
+    - ticker: KDP
+      name: Keurig Dr Pepper
+    - ticker: KEY
+      name: KeyCorp
+    - ticker: KEYS
+      name: Keysight Technologies
+    - ticker: KMB
+      name: Kimberly-Clark
+    - ticker: KIM
+      name: Kimco Realty
+    - ticker: KMI
+      name: Kinder Morgan
+    - ticker: KKR
+      name: KKR & Co.
+    - ticker: KLAC
+      name: KLA Corporation
+    - ticker: KHC
+      name: Kraft Heinz
+    - ticker: KR
+      name: Kroger
+    - ticker: LHX
+      name: L3Harris
+    - ticker: LH
+      name: Labcorp
+    - ticker: LRCX
+      name: Lam Research
+    - ticker: LVS
+      name: Las Vegas Sands
+    - ticker: LDOS
+      name: Leidos
+    - ticker: LEN
+      name: Lennar
+    - ticker: LII
+      name: Lennox International
+    - ticker: LLY
+      name: Lilly (Eli)
+    - ticker: LIN
+      name: Linde plc
+    - ticker: LYV
+      name: Live Nation Entertainment
+    - ticker: LMT
+      name: Lockheed Martin
+    - ticker: L
+      name: Loews Corporation
+    - ticker: LOW
+      name: Lowe's
+    - ticker: LULU
+      name: Lululemon Athletica
+    - ticker: LITE
+      name: Lumentum
+    - ticker: LYB
+      name: LyondellBasell
+    - ticker: MTB
+      name: M&T Bank
+    - ticker: MPC
+      name: Marathon Petroleum
+    - ticker: MAR
+      name: Marriott International
+    - ticker: MRSH
+      name: Marsh McLennan
+    - ticker: MLM
+      name: Martin Marietta Materials
+    - ticker: MAS
+      name: Masco
+    - ticker: MA
+      name: Mastercard
+    - ticker: MKC
+      name: McCormick & Company
+    - ticker: MCD
+      name: McDonald's
+    - ticker: MCK
+      name: McKesson Corporation
+    - ticker: MDT
+      name: Medtronic
+    - ticker: MRK
+      name: Merck & Co.
+    - ticker: META
+      name: Meta Platforms
+    - ticker: MET
+      name: MetLife
+    - ticker: MTD
+      name: Mettler Toledo
+    - ticker: MGM
+      name: MGM Resorts
+    - ticker: MCHP
+      name: Microchip Technology
+    - ticker: MU
+      name: Micron Technology
+    - ticker: MSFT
+      name: Microsoft
+    - ticker: MAA
+      name: Mid-America Apartment Communities
+    - ticker: MRNA
+      name: Moderna
+    - ticker: TAP
+      name: Molson Coors Beverage Company
+    - ticker: MDLZ
+      name: Mondelez International
+    - ticker: MPWR
+      name: Monolithic Power Systems
+    - ticker: MNST
+      name: Monster Beverage
+    - ticker: MCO
+      name: Moody's Corporation
+    - ticker: MS
+      name: Morgan Stanley
+    - ticker: MOS
+      name: Mosaic Company (The)
+    - ticker: MSI
+      name: Motorola Solutions
+    - ticker: MSCI
+      name: MSCI Inc.
+    - ticker: NDAQ
+      name: Nasdaq, Inc.
+    - ticker: NTAP
+      name: NetApp
+    - ticker: NFLX
+      name: Netflix
+    - ticker: NEM
+      name: Newmont
+    - ticker: NWSA
+      name: News Corp (Class A)
+    - ticker: NWS
+      name: News Corp (Class B)
+    - ticker: NEE
+      name: NextEra Energy
+    - ticker: NKE
+      name: Nike, Inc.
+    - ticker: NI
+      name: NiSource
+    - ticker: NDSN
+      name: Nordson Corporation
+    - ticker: NSC
+      name: Norfolk Southern
+    - ticker: NTRS
+      name: Northern Trust
+    - ticker: NOC
+      name: Northrop Grumman
+    - ticker: NCLH
+      name: Norwegian Cruise Line Holdings
+    - ticker: NRG
+      name: NRG Energy
+    - ticker: NUE
+      name: Nucor
+    - ticker: NVDA
+      name: Nvidia
+    - ticker: NVR
+      name: NVR, Inc.
+    - ticker: NXPI
+      name: NXP Semiconductors
+    - ticker: ORLY
+      name: O’Reilly Automotive
+    - ticker: OXY
+      name: Occidental Petroleum
+    - ticker: ODFL
+      name: Old Dominion
+    - ticker: OMC
+      name: Omnicom Group
+    - ticker: 'ON'
+      name: ON Semiconductor
+    - ticker: OKE
+      name: Oneok
+    - ticker: ORCL
+      name: Oracle Corporation
+    - ticker: OTIS
+      name: Otis Worldwide
+    - ticker: PCAR
+      name: Paccar
+    - ticker: PKG
+      name: Packaging Corporation of America
+    - ticker: PLTR
+      name: Palantir Technologies
+    - ticker: PANW
+      name: Palo Alto Networks
+    - ticker: PSKY
+      name: Paramount Skydance Corporation
+    - ticker: PH
+      name: Parker Hannifin
+    - ticker: PAYX
+      name: Paychex
+    - ticker: PYPL
+      name: PayPal
+    - ticker: PNR
+      name: Pentair
+    - ticker: PEP
+      name: PepsiCo
+    - ticker: PFE
+      name: Pfizer
+    - ticker: PCG
+      name: PG&E Corporation
+    - ticker: PM
+      name: Philip Morris International
+    - ticker: PSX
+      name: Phillips 66
+    - ticker: PNW
+      name: Pinnacle West Capital
+    - ticker: PNC
+      name: PNC Financial Services
+    - ticker: POOL
+      name: Pool Corporation
+    - ticker: PPG
+      name: PPG Industries
+    - ticker: PPL
+      name: PPL Corporation
+    - ticker: PFG
+      name: Principal Financial Group
+    - ticker: PG
+      name: Procter & Gamble
+    - ticker: PGR
+      name: Progressive Corporation
+    - ticker: PLD
+      name: Prologis
+    - ticker: PRU
+      name: Prudential Financial
+    - ticker: PEG
+      name: Public Service Enterprise Group
+    - ticker: PTC
+      name: PTC Inc.
+    - ticker: PSA
+      name: Public Storage
+    - ticker: PHM
+      name: PulteGroup
+    - ticker: PWR
+      name: Quanta Services
+    - ticker: QCOM
+      name: Qualcomm
+    - ticker: DGX
+      name: Quest Diagnostics
+    - ticker: Q
+      name: Qnity Electronics
+    - ticker: RL
+      name: Ralph Lauren Corporation
+    - ticker: RJF
+      name: Raymond James Financial
+    - ticker: RTX
+      name: RTX Corporation
+    - ticker: O
+      name: Realty Income
+    - ticker: REG
+      name: Regency Centers
+    - ticker: REGN
+      name: Regeneron Pharmaceuticals
+    - ticker: RF
+      name: Regions Financial Corporation
+    - ticker: RSG
+      name: Republic Services
+    - ticker: RMD
+      name: ResMed
+    - ticker: RVTY
+      name: Revvity
+    - ticker: HOOD
+      name: Robinhood Markets
+    - ticker: ROK
+      name: Rockwell Automation
+    - ticker: ROL
+      name: Rollins, Inc.
+    - ticker: ROP
+      name: Roper Technologies
+    - ticker: ROST
+      name: Ross Stores
+    - ticker: RCL
+      name: Royal Caribbean Group
+    - ticker: SPGI
+      name: S&P Global
+    - ticker: CRM
+      name: Salesforce
+    - ticker: SNDK
+      name: Sandisk
+    - ticker: SBAC
+      name: SBA Communications
+    - ticker: SLB
+      name: Schlumberger
+    - ticker: STX
+      name: Seagate Technology
+    - ticker: SRE
+      name: Sempra
+    - ticker: NOW
+      name: ServiceNow
+    - ticker: SHW
+      name: Sherwin-Williams
+    - ticker: SPG
+      name: Simon Property Group
+    - ticker: SWKS
+      name: Skyworks Solutions
+    - ticker: SJM
+      name: J.M. Smucker Company (The)
+    - ticker: SW
+      name: Smurfit Westrock
+    - ticker: SNA
+      name: Snap-on
+    - ticker: SOLV
+      name: Solventum
+    - ticker: SO
+      name: Southern Company
+    - ticker: LUV
+      name: Southwest Airlines
+    - ticker: SWK
+      name: Stanley Black & Decker
+    - ticker: SBUX
+      name: Starbucks
+    - ticker: STT
+      name: State Street Corporation
+    - ticker: STLD
+      name: Steel Dynamics
+    - ticker: STE
+      name: Steris
+    - ticker: SYK
+      name: Stryker Corporation
+    - ticker: SMCI
+      name: Supermicro
+    - ticker: SYF
+      name: Synchrony Financial
+    - ticker: SNPS
+      name: Synopsys
+    - ticker: SYY
+      name: Sysco
+    - ticker: TMUS
+      name: T-Mobile US
+    - ticker: TROW
+      name: T. Rowe Price
+    - ticker: TTWO
+      name: Take-Two Interactive
+    - ticker: TPR
+      name: Tapestry, Inc.
+    - ticker: TRGP
+      name: Targa Resources
+    - ticker: TGT
+      name: Target Corporation
+    - ticker: TEL
+      name: TE Connectivity
+    - ticker: TDY
+      name: Teledyne Technologies
+    - ticker: TER
+      name: Teradyne
+    - ticker: TSLA
+      name: Tesla, Inc.
+    - ticker: TXN
+      name: Texas Instruments
+    - ticker: TPL
+      name: Texas Pacific Land Corporation
+    - ticker: TXT
+      name: Textron
+    - ticker: TMO
+      name: Thermo Fisher Scientific
+    - ticker: TJX
+      name: TJX Companies
+    - ticker: TKO
+      name: TKO Group Holdings
+    - ticker: TTD
+      name: Trade Desk (The)
+    - ticker: TSCO
+      name: Tractor Supply
+    - ticker: TT
+      name: Trane Technologies
+    - ticker: TDG
+      name: TransDigm Group
+    - ticker: TRV
+      name: Travelers Companies (The)
+    - ticker: TRMB
+      name: Trimble Inc.
+    - ticker: TFC
+      name: Truist Financial
+    - ticker: TYL
+      name: Tyler Technologies
+    - ticker: TSN
+      name: Tyson Foods
+    - ticker: USB
+      name: U.S. Bancorp
+    - ticker: UBER
+      name: Uber
+    - ticker: UDR
+      name: UDR, Inc.
+    - ticker: ULTA
+      name: Ulta Beauty
+    - ticker: UNP
+      name: Union Pacific Corporation
+    - ticker: UAL
+      name: United Airlines Holdings
+    - ticker: UPS
+      name: United Parcel Service
+    - ticker: URI
+      name: United Rentals
+    - ticker: UNH
+      name: UnitedHealth Group
+    - ticker: UHS
+      name: Universal Health Services
+    - ticker: VLO
+      name: Valero Energy
+    - ticker: VTR
+      name: Ventas
+    - ticker: VLTO
+      name: Veralto
+    - ticker: VRSN
+      name: Verisign
+    - ticker: VRSK
+      name: Verisk Analytics
+    - ticker: VZ
+      name: Verizon
+    - ticker: VRTX
+      name: Vertex Pharmaceuticals
+    - ticker: VRT
+      name: Vertiv
+    - ticker: VTRS
+      name: Viatris
+    - ticker: VICI
+      name: Vici Properties
+    - ticker: V
+      name: Visa Inc.
+    - ticker: VST
+      name: Vistra Corp.
+    - ticker: VMC
+      name: Vulcan Materials Company
+    - ticker: WRB
+      name: W. R. Berkley Corporation
+    - ticker: GWW
+      name: W. W. Grainger
+    - ticker: WAB
+      name: Wabtec
+    - ticker: WMT
+      name: Walmart
+    - ticker: DIS
+      name: Walt Disney Company (The)
+    - ticker: WBD
+      name: Warner Bros. Discovery
+    - ticker: WM
+      name: Waste Management
+    - ticker: WAT
+      name: Waters Corporation
+    - ticker: WEC
+      name: WEC Energy Group
+    - ticker: WFC
+      name: Wells Fargo
+    - ticker: WELL
+      name: Welltower
+    - ticker: WST
+      name: West Pharmaceutical Services
+    - ticker: WDC
+      name: Western Digital
+    - ticker: WY
+      name: Weyerhaeuser
+    - ticker: WSM
+      name: Williams-Sonoma, Inc.
+    - ticker: WMB
+      name: Williams Companies
+    - ticker: WTW
+      name: Willis Towers Watson
+    - ticker: WDAY
+      name: Workday, Inc.
+    - ticker: WYNN
+      name: Wynn Resorts
+    - ticker: XEL
+      name: Xcel Energy
+    - ticker: XYL
+      name: Xylem Inc.
+    - ticker: YUM
+      name: Yum! Brands
+    - ticker: ZBRA
+      name: Zebra Technologies
+    - ticker: ZBH
+      name: Zimmer Biomet
+    - ticker: ZTS
+      name: Zoetis
+    - ticker: AACBR
+      name: Artius II Acquisition Inc.
+    - ticker: AACBU
+      name: Artius II Acquisition Inc.
+    - ticker: AACG
+      name: ATA Creativity Global
+    - ticker: AACI
+      name: Armada Acquisition Corp. III
+    - ticker: AACIU
+      name: Armada Acquisition Corp. III
+    - ticker: AACIW
+      name: Armada Acquisition Corp. III
+    - ticker: AACOU
+      name: Abony Acquisition Corp. I
+    - ticker: AAL
+      name: American Airlines Group, Inc.
+    - ticker: AAME
+      name: Atlantic American Corporation
+    - ticker: AAOI
+      name: Applied Optoelectronics, Inc.
+    - ticker: AAON
+      name: AAON, Inc.
+    - ticker: AAPG
+      name: Ascentage Pharma Group International
+    - ticker: AARD
+      name: Aardvark Therapeutics, Inc.
+    - ticker: ABAT
+      name: American Battery Technology Company
+    - ticker: ABCL
+      name: AbCellera Biologics Inc.
+    - ticker: ABEO
+      name: Abeona Therapeutics Inc.
+    - ticker: ABLVW
+      name: Able View Global Inc.
+    - ticker: ABOS
+      name: Acumen Pharmaceuticals, Inc.
+    - ticker: ABSI
+      name: Absci Corporation
+    - ticker: ABTC
+      name: American Bitcoin Corp.
+    - ticker: ABTS
+      name: Abits Group Inc
+    - ticker: ABUS
+      name: Arbutus Biopharma Corporation
+    - ticker: ABVC
+      name: ABVC BioPharma, Inc.
+    - ticker: ABVX
+      name: Abivax SA
+    - ticker: ACAAU
+      name: Averin Capital Acquisition Corp.
+    - ticker: ACAD
+      name: ACADIA Pharmaceuticals Inc.
+    - ticker: ACB
+      name: Aurora Cannabis Inc.
+    - ticker: ACCL
+      name: Acco Group Holdings Limited
+    - ticker: ACDC
+      name: ProFrac Holding Corp.
+    - ticker: ACET
+      name: Adicet Bio, Inc.
+    - ticker: ACFN
+      name: Acorn Energy, Inc.
+    - ticker: ACGLN
+      name: Arch Capital Group Ltd.
+    - ticker: ACGLO
+      name: Arch Capital Group Ltd.
+    - ticker: ACHC
+      name: Acadia Healthcare Company, Inc.
+    - ticker: ACHV
+      name: 'Achieve Life Sciences, Inc. '
+    - ticker: ACIC
+      name: American Coastal Insurance Corporation
+    - ticker: ACIU
+      name: AC Immune SA
+    - ticker: ACIW
+      name: ACI Worldwide, Inc.
+    - ticker: ACLS
+      name: Axcelis Technologies, Inc.
+    - ticker: ACLX
+      name: Arcellx, Inc.
+    - ticker: ACMR
+      name: ACM Research, Inc.
+    - ticker: ACNB
+      name: ACNB Corporation
+    - ticker: ACNT
+      name: Ascent Industries Co.
+    - ticker: ACOG
+      name: Alpha Cognition Inc.
+    - ticker: ACON
+      name: Aclarion, Inc.
+    - ticker: ACONW
+      name: Aclarion, Inc.
+    - ticker: ACRS
+      name: Aclaris Therapeutics, Inc.
+    - ticker: ACRV
+      name: Acrivon Therapeutics, Inc.
+    - ticker: ACT
+      name: Enact Holdings, Inc.
+    - ticker: ACTG
+      name: Acacia Research Corporation
+    - ticker: ACTU
+      name: Actuate Therapeutics, Inc.
+    - ticker: ACXP
+      name: Acurx Pharmaceuticals, Inc.
+    - ticker: ADAC
+      name: American Drive Acquisition Company
+    - ticker: ADACU
+      name: American Drive Acquisition Company
+    - ticker: ADACW
+      name: American Drive Acquisition Company
+    - ticker: ADAG
+      name: Adagene Inc.
+    - ticker: ADAM
+      name: Adamas Trust, Inc.
+    - ticker: ADAMG
+      name: Adamas Trust, Inc.
+    - ticker: ADAMH
+      name: Adamas Trust, Inc.
+    - ticker: ADAMI
+      name: Adamas Trust, Inc.
+    - ticker: ADAML
+      name: Adamas Trust, Inc.
+    - ticker: ADAMM
+      name: Adamas Trust, Inc.
+    - ticker: ADAMN
+      name: Adamas Trust, Inc.
+    - ticker: ADAMO
+      name: Adamas Trust, Inc.
+    - ticker: ADAMZ
+      name: Adamas Trust, Inc.
+    - ticker: ADEA
+      name: 'Adeia Inc. '
+    - ticker: ADGM
+      name: Adagio Medical Holdings, Inc
+    - ticker: ADIL
+      name: Adial Pharmaceuticals, Inc
+    - ticker: ADMA
+      name: ADMA Biologics Inc
+    - ticker: ADPT
+      name: Adaptive Biotechnologies Corporation
+    - ticker: ADSE
+      name: ADS-TEC ENERGY PLC
+    - ticker: ADSEW
+      name: ADS-TEC ENERGY PLC
+    - ticker: ADTN
+      name: ADTRAN Holdings, Inc.
+    - ticker: ADUR
+      name: Aduro Clean Technologies Inc.
+    - ticker: ADUS
+      name: Addus HomeCare Corporation
+    - ticker: ADVB
+      name: Advanced Biomed Inc.
+    - ticker: ADXN
+      name: Addex Therapeutics Ltd
+    - ticker: AEAQ
+      name: Activate Energy Acquisition Corp.
+    - ticker: AEAQU
+      name: Activate Energy Acquisition Corp.
+    - ticker: AEAQW
+      name: Activate Energy Acquisition Corp.
+    - ticker: AEBI
+      name: Aebi Schmidt Holding AG
+    - ticker: AEC
+      name: Anfield Energy Inc.
+    - ticker: AEHL
+      name: Antelope Enterprise Holdings Limited
+    - ticker: AEHR
+      name: Aehr Test Systems
+    - ticker: AEI
+      name: Alset Inc.
+    - ticker: AEIS
+      name: Advanced Energy Industries, Inc.
+    - ticker: AEMD
+      name: Aethlon Medical, Inc.
+    - ticker: AENT
+      name: Alliance Entertainment Holding Corporation
+    - ticker: AENTW
+      name: Alliance Entertainment Holding Corporation
+    - ticker: AERTW
+      name: Aeries Technology, Inc.
+    - ticker: AEVA
+      name: Aeva Technologies, Inc.
+    - ticker: AEYE
+      name: AudioEye, Inc.
+    - ticker: AFBI
+      name: Affinity Bancshares, Inc.
+    - ticker: AFCG
+      name: Advanced Flower Capital Inc.
+    - ticker: AFJK
+      name: Aimei Health Technology Co., Ltd
+    - ticker: AFJKR
+      name: Aimei Health Technology Co., Ltd
+    - ticker: AFJKU
+      name: Aimei Health Technology Co., Ltd
+    - ticker: AFRI
+      name: Forafric Global PLC
+    - ticker: AFRIW
+      name: Forafric Global PLC
+    - ticker: AFRM
+      name: Affirm Holdings, Inc.
+    - ticker: AFYA
+      name: Afya Limited
+    - ticker: AGCC
+      name: Agencia Comercial Spirits Ltd
+    - ticker: AGEN
+      name: Agenus Inc.
+    - ticker: AGH
+      name: Aureus Greenway Holdings Inc.
+    - ticker: AGIO
+      name: Agios Pharmaceuticals, Inc.
+    - ticker: AGMB
+      name: AgomAb Therapeutics NV
+    - ticker: AGMH
+      name: AGM Group Holdings Inc.
+    - ticker: AGNC
+      name: AGNC Investment Corp.
+    - ticker: AGNCL
+      name: AGNC Investment Corp.
+    - ticker: AGNCM
+      name: AGNC Investment Corp.
+    - ticker: AGNCN
+      name: AGNC Investment Corp.
+    - ticker: AGNCO
+      name: AGNC Investment Corp.
+    - ticker: AGNCP
+      name: AGNC Investment Corp.
+    - ticker: AGNCZ
+      name: AGNC Investment Corp.
+    - ticker: AGPU
+      name: Axe Compute Inc.
+    - ticker: AGYS
+      name: Agilysys, Inc.
+    - ticker: AHCO
+      name: 'AdaptHealth Corp. '
+    - ticker: AHG
+      name: Akso Health Group
+    - ticker: AHMA
+      name: Ambitions Enterprise Management Co. L.L.C
+    - ticker: AIDX
+      name: 20/20 Biolabs, Inc.
+    - ticker: AIFF
+      name: 'Firefly Neuroscience, Inc. '
+    - ticker: AIFU
+      name: AIFU Inc.
+    - ticker: AIHS
+      name: Senmiao Technology Limited
+    - ticker: AIIOW
+      name: Robo.ai Inc.
+    - ticker: AIMD
+      name: Ainos, Inc.
+    - ticker: AIMDW
+      name: Ainos, Inc.
+    - ticker: AIOS
+      name: AIOS Tech Inc.
+    - ticker: AIOT
+      name: PowerFleet, Inc.
+    - ticker: AIP
+      name: 'Arteris, Inc. '
+    - ticker: AIRG
+      name: Airgain, Inc.
+    - ticker: AIRJ
+      name: AirJoule Technologies Corporation
+    - ticker: AIRJW
+      name: AirJoule Technologies Corporation
+    - ticker: AIRO
+      name: AIRO Group Holdings, Inc.
+    - ticker: AIRS
+      name: AirSculpt Technologies, Inc.
+    - ticker: AIRT
+      name: Air T, Inc.
+    - ticker: AIRTP
+      name: Air T, Inc.
+    - ticker: AISP
+      name: Airship AI Holdings, Inc
+    - ticker: AISPW
+      name: Airship AI Holdings, Inc
+    - ticker: AIXC
+      name: AIxCrypto Holdings, Inc.
+    - ticker: AKAN
+      name: Akanda Corp.
+    - ticker: AKBA
+      name: Akebia Therapeutics, Inc.
+    - ticker: AKTS
+      name: Aktis Oncology, Inc.
+    - ticker: ALAB
+      name: Astera Labs, Inc.
+    - ticker: ALAR
+      name: Alarum Technologies Ltd.
+    - ticker: ALBT
+      name: Avalon GloboCare Corp.
+    - ticker: ALCO
+      name: Alico, Inc.
+    - ticker: ALCY
+      name: Alchemy Investments Acquisition Corp 1
+    - ticker: ALCYU
+      name: Alchemy Investments Acquisition Corp 1
+    - ticker: ALCYW
+      name: Alchemy Investments Acquisition Corp 1
+    - ticker: ALDF
+      name: Aldel Financial II Inc.
+    - ticker: ALDFU
+      name: Aldel Financial II Inc.
+    - ticker: ALDFW
+      name: Aldel Financial II Inc.
+    - ticker: ALDX
+      name: Aldeyra Therapeutics, Inc.
+    - ticker: ALEC
+      name: Alector, Inc.
+    - ticker: ALF
+      name: Centurion Acquisition Corp.
+    - ticker: ALFUU
+      name: Centurion Acquisition Corp.
+    - ticker: ALFUW
+      name: Centurion Acquisition Corp.
+    - ticker: ALGM
+      name: Allegro MicroSystems, Inc.
+    - ticker: ALGS
+      name: Aligos Therapeutics, Inc.
+    - ticker: ALGT
+      name: Allegiant Travel Company
+    - ticker: ALHC
+      name: Alignment Healthcare, Inc.
+    - ticker: ALIS
+      name: Calisa Acquisition Corp
+    - ticker: ALISR
+      name: Calisa Acquisition Corp
+    - ticker: ALISU
+      name: Calisa Acquisition Corp
+    - ticker: ALKS
+      name: Alkermes plc
+    - ticker: ALKT
+      name: Alkami Technology, Inc.
+    - ticker: ALLO
+      name: Allogene Therapeutics, Inc.
+    - ticker: ALLR
+      name: Allarity Therapeutics, Inc.
+    - ticker: ALLT
+      name: Allot Ltd.
+    - ticker: ALM
+      name: Almonty Industries Inc.
+    - ticker: ALMS
+      name: Alumis Inc.
+    - ticker: ALMU
+      name: Aeluma, Inc.
+    - ticker: ALNT
+      name: Allient Inc.
+    - ticker: ALNY
+      name: Alnylam Pharmaceuticals, Inc.
+    - ticker: ALOT
+      name: AstroNova, Inc.
+    - ticker: ALOV
+      name: Aldabra 4 Liquidity Opportunity Vehicle, Inc.
+    - ticker: ALOVU
+      name: Aldabra 4 Liquidity Opportunity Vehicle, Inc.
+    - ticker: ALOVW
+      name: Aldabra 4 Liquidity Opportunity Vehicle, Inc.
+    - ticker: ALOY
+      name: REalloys Inc.
+    - ticker: ALPS
+      name: ALPS Group Inc
+    - ticker: ALRM
+      name: Alarm.com Holdings, Inc.
+    - ticker: ALRS
+      name: Alerus Financial Corporation
+    - ticker: ALT
+      name: Altimmune, Inc.
+    - ticker: ALTI
+      name: AlTi Global, Inc.
+    - ticker: ALTO
+      name: Alto Ingredients, Inc.
+    - ticker: ALTS
+      name: ALT5 Sigma Corporation
+    - ticker: ALVO
+      name: Alvotech
+    - ticker: ALVOW
+      name: Alvotech
+    - ticker: ALXO
+      name: ALX Oncology Holdings Inc.
+    - ticker: AMAL
+      name: Amalgamated Financial Corp.
+    - ticker: AMBA
+      name: Ambarella, Inc.
+    - ticker: AMBR
+      name: Amber International Holding Limited
+    - ticker: AMCI
+      name: AMC Robotics Corporation
+    - ticker: AMCX
+      name: AMC Networks Inc.
+    - ticker: AMKR
+      name: Amkor Technology, Inc.
+    - ticker: AMLX
+      name: Amylyx Pharmaceuticals, Inc.
+    - ticker: AMODW
+      name: Alpha Modus Holdings, Inc.
+    - ticker: AMPG
+      name: Amplitech Group, Inc.
+    - ticker: AMPGR
+      name: Amplitech Group, Inc.
+    - ticker: AMPGZ
+      name: Amplitech Group, Inc.
     indices:
-      - ticker: "^GSPC"
-        name: "S&P 500"
-      - ticker: "^IXIC"
-        name: "NASDAQ"
-      - ticker: "^DJI"
-        name: "다우존스"
-      - ticker: "^VIX"
-        name: "VIX"
-
+    - ticker: ^GSPC
+      name: S&P 500
+    - ticker: ^IXIC
+      name: NASDAQ
+    - ticker: ^DJI
+      name: 다우존스
+    - ticker: ^VIX
+      name: VIX
 livermore:
   pivot_threshold_pct: 5.0
   volume_surge_ratio: 1.5
   lookback_days: 20
   false_breakout_confirm_days: 2
-
 money_management:
   max_position_pct: 20
-  split_buy_ratio: [50, 30, 20]
+  split_buy_ratio:
+  - 50
+  - 30
+  - 20
   stop_loss_pct: 5.0
-
 signals:
   min_confidence: 60
   telegram_enabled: true
-
 web:
-  host: "127.0.0.1"
+  host: 127.0.0.1
   port: 5002
