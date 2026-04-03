@@ -1,0 +1,6 @@
+config/.env
+db/trend_trading.db
+__pycache__/
+*.pyc
+.superpowers/
+.pytest_cache/
