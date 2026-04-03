@@ -1,5 +1,7 @@
 """MarketCollector facade — orchestrates KR and US data collection."""
 
+from __future__ import annotations
+
 import logging
 
 import pandas as pd

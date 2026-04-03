@@ -1,5 +1,7 @@
 """Base collector abstract class with validation and retry logic."""
 
+from __future__ import annotations
+
 import abc
 import logging
 import time
