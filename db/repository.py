@@ -59,6 +59,13 @@ def get_prices(
     return session.execute(stmt).scalars().all()
 
 
+def get_all_symbols(session: Session, market: str) -> list[str]:
+    """Return all distinct symbols for a given market from the prices table."""
+    from sqlalchemy import distinct
+    stmt = select(distinct(Price.symbol)).where(Price.market == market)
+    return [row[0] for row in session.execute(stmt).all()]
+
+
 # ── MarketIndex ──────────────────────────────────────────────────────────
 
 def upsert_market_index(

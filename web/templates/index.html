@@ -58,18 +58,21 @@
       <!-- filled by JS -->
     </section>
 
-    <!-- Signal Summary Cards -->
+    <!-- Signal Summary Cards (clickable filter) -->
     <section id="summary-section" class="grid grid-cols-3 gap-4 mb-6">
-      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-green-500">
-        <div class="text-sm text-slate-400">매수</div>
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-green-500 cursor-pointer hover:bg-slate-700 transition-colors"
+           onclick="filterSignals('buy')" id="card-buy">
+        <div class="text-sm text-slate-400">매수 시그널</div>
         <div class="text-3xl font-bold text-green-400" id="count-buy">0</div>
       </div>
-      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-red-500">
-        <div class="text-sm text-slate-400">매도</div>
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-red-500 cursor-pointer hover:bg-slate-700 transition-colors"
+           onclick="filterSignals('sell')" id="card-sell">
+        <div class="text-sm text-slate-400">매도 시그널</div>
         <div class="text-3xl font-bold text-red-400" id="count-sell">0</div>
       </div>
-      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-yellow-500">
-        <div class="text-sm text-slate-400">관찰</div>
+      <div class="bg-slate-800 rounded-lg p-4 border-l-4 border-yellow-500 cursor-pointer hover:bg-slate-700 transition-colors"
+           onclick="filterSignals('watch')" id="card-watch">
+        <div class="text-sm text-slate-400">관찰 중</div>
         <div class="text-3xl font-bold text-yellow-400" id="count-watch">0</div>
       </div>
     </section>
@@ -79,8 +82,11 @@
 
       <!-- Left: Signal List -->
       <div class="w-[340px] flex-shrink-0 bg-slate-800 rounded-lg overflow-hidden flex flex-col">
-        <div class="px-4 py-3 border-b border-slate-700 text-sm font-semibold text-slate-300">시그널 목록</div>
-        <div id="signal-list" class="flex-1 overflow-y-auto p-2 space-y-2">
+        <div class="px-4 py-3 border-b border-slate-700 flex items-center justify-between">
+          <span class="text-sm font-semibold text-slate-300" id="signal-list-title">시그널 목록</span>
+          <button onclick="filterSignals('all')" class="text-xs text-slate-500 hover:text-slate-300" id="btn-show-all" style="display:none;">전체보기</button>
+        </div>
+        <div id="signal-list" class="overflow-y-auto p-2 space-y-2" style="max-height: 500px;">
           <div class="text-center text-slate-500 text-sm py-8">데이터를 불러오는 중...</div>
         </div>
       </div>
@@ -220,42 +226,76 @@
     // -----------------------------------------------------------------------
     // Signal List
     // -----------------------------------------------------------------------
+    let allSignals = [];
+    let currentFilter = 'all';
+
     async function loadSignals() {
       try {
-        const data = await fetchJSON(`/api/${market}/signals`);
-        const container = document.getElementById('signal-list');
-
-        if (!data.length) {
-          container.innerHTML = '<div class="text-center text-slate-500 text-sm py-8">시그널 없음</div>';
-          return;
-        }
-
-        container.innerHTML = data.map(sig => {
-          const typeBadge = {
-            buy:   '<span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">매수</span>',
-            sell:  '<span class="px-2 py-0.5 rounded text-xs font-medium bg-red-500/20 text-red-400">매도</span>',
-            watch: '<span class="px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400">관찰</span>',
-          }[sig.signal_type] || '<span class="px-2 py-0.5 rounded text-xs font-medium bg-slate-600 text-slate-300">' + sig.signal_type + '</span>';
-
-          const conf = sig.confidence != null ? `<span class="text-xs text-slate-400">${(sig.confidence * 100).toFixed(0)}%</span>` : '';
-
-          return `
-            <div class="signal-card bg-slate-700/50 hover:bg-slate-700 rounded-lg p-3 cursor-pointer"
-                 data-symbol="${sig.symbol}" onclick="selectSignal(this, '${sig.symbol}')">
-              <div class="flex items-center justify-between mb-1">
-                <span class="font-semibold text-sm">${displayName(sig.symbol)}</span>
-                ${typeBadge}
-              </div>
-              <div class="text-xs text-slate-400 truncate mb-1">${sig.reason || ''}</div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm">${sig.price ? Number(sig.price).toLocaleString() : '-'}</span>
-                ${conf}
-              </div>
-            </div>`;
-        }).join('');
+        allSignals = await fetchJSON(`/api/${market}/signals`);
+        renderSignalList(allSignals);
       } catch (e) {
         console.error('Failed to load signals:', e);
       }
+    }
+
+    function filterSignals(type) {
+      currentFilter = type;
+      const titleEl = document.getElementById('signal-list-title');
+      const showAllBtn = document.getElementById('btn-show-all');
+
+      // Highlight active card
+      ['buy', 'sell', 'watch'].forEach(t => {
+        const card = document.getElementById(`card-${t}`);
+        if (card) {
+          card.classList.toggle('ring-2', t === type);
+          card.classList.toggle('ring-blue-500', t === type);
+        }
+      });
+
+      if (type === 'all') {
+        titleEl.textContent = '시그널 목록';
+        showAllBtn.style.display = 'none';
+        renderSignalList(allSignals);
+      } else {
+        const typeNames = { buy: '매수', sell: '매도', watch: '관찰' };
+        const filtered = allSignals.filter(s => s.signal_type === type);
+        titleEl.textContent = `${typeNames[type]} 시그널 (${filtered.length})`;
+        showAllBtn.style.display = 'block';
+        renderSignalList(filtered);
+      }
+    }
+
+    function renderSignalList(signals) {
+      const container = document.getElementById('signal-list');
+
+      if (!signals.length) {
+        container.innerHTML = '<div class="text-center text-slate-500 text-sm py-8">시그널 없음</div>';
+        return;
+      }
+
+      container.innerHTML = signals.map(sig => {
+        const typeBadge = {
+          buy:   '<span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">매수</span>',
+          sell:  '<span class="px-2 py-0.5 rounded text-xs font-medium bg-red-500/20 text-red-400">매도</span>',
+          watch: '<span class="px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400">관찰</span>',
+        }[sig.signal_type] || '<span class="px-2 py-0.5 rounded text-xs font-medium bg-slate-600 text-slate-300">' + sig.signal_type + '</span>';
+
+        const conf = sig.confidence != null ? `<span class="text-xs text-slate-400">${Math.round(sig.confidence)}%</span>` : '';
+
+        return `
+          <div class="signal-card bg-slate-700/50 hover:bg-slate-700 rounded-lg p-3 cursor-pointer"
+               data-symbol="${sig.symbol}" onclick="selectSignal(this, '${sig.symbol}')">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-semibold text-sm">${displayName(sig.symbol)}</span>
+              ${typeBadge}
+            </div>
+            <div class="text-xs text-slate-400 truncate mb-1">${sig.reason || ''}</div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">${sig.price ? Number(sig.price).toLocaleString() : '-'}</span>
+              ${conf}
+            </div>
+          </div>`;
+      }).join('');
     }
 
     // -----------------------------------------------------------------------

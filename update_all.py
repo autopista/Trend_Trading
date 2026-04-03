@@ -29,6 +29,7 @@ from collectors.market_collector import MarketCollector, _parse_symbol_list
 from db.database import get_engine, get_session, init_db
 from db.models import Signal, Trade
 from db.repository import (
+    get_all_symbols,
     get_open_trades,
     get_prices,
     get_signals_by_date,
@@ -121,15 +122,16 @@ def run_phase2(config: dict, market: str, start_date: str, end_date: str) -> Non
     livermore_cfg = config.get("livermore", {})
     mk = MarketKey(pivot_threshold_pct=livermore_cfg.get("pivot_threshold_pct", 5.0))
 
-    market_cfg = config.get("markets", {}).get(market, {})
-    watchlist = _parse_symbol_list(market_cfg.get("watchlist", []))
-
     session = get_session()
     try:
         sd = date.fromisoformat(start_date)
         ed = date.fromisoformat(end_date)
 
-        for symbol in watchlist:
+        # Analyze ALL symbols in DB for this market (not just watchlist)
+        all_symbols = get_all_symbols(session, market)
+        logger.info("Found %d symbols in DB for %s", len(all_symbols), market)
+
+        for symbol in all_symbols:
             prices = get_prices(session, symbol, sd, ed)
             if len(prices) < 5:
                 logger.warning("Insufficient data for %s — skipping", symbol)
@@ -206,7 +208,6 @@ def run_phase3(
     )
 
     market_cfg = config.get("markets", {}).get(market, {})
-    watchlist = _parse_symbol_list(market_cfg.get("watchlist", []))
     indices = _parse_symbol_list(market_cfg.get("indices", []))
 
     session = get_session()
@@ -237,7 +238,11 @@ def run_phase3(
 
         logger.info("Market direction: %s", market_direction)
 
-        for symbol in watchlist:
+        # Generate signals for ALL symbols in DB (not just watchlist)
+        all_symbols = get_all_symbols(session, market)
+        logger.info("Generating signals for %d symbols", len(all_symbols))
+
+        for symbol in all_symbols:
             prices = get_prices(session, symbol, sd, ed)
             if len(prices) < 25:
                 logger.warning("Insufficient data for %s — skipping signal gen", symbol)
