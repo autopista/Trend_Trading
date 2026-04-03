@@ -502,6 +502,12 @@ markets:
       name: KOSPI
     - ticker: ^KQ11
       name: KOSDAQ
+    - ticker: KRW=X
+      name: 원/달러
+    - ticker: GC=F
+      name: 금(Gold)
+    - ticker: CL=F
+      name: 원유(WTI)
   us:
     watchlist:
     - ticker: MMM

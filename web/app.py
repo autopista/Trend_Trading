@@ -65,41 +65,47 @@ def performance(market: str):
 
 @app.route("/api/<market>/indices")
 def api_indices(market: str):
-    """Return market indices for today (fallback to latest available)."""
+    """Return latest value for each market index."""
     session = get_session()
     try:
-        today = date.today()
+        # Get all distinct index names for this market
+        names = [row[0] for row in session.execute(
+            select(MarketIndex.index_name).where(MarketIndex.market == market).distinct()
+        ).all()]
 
-        # Try today first
-        stmt = (
-            select(MarketIndex)
-            .where(MarketIndex.market == market, MarketIndex.date == today)
-        )
-        rows = session.execute(stmt).scalars().all()
+        result = []
+        for name in names:
+            # Latest row for this index
+            r = session.execute(
+                select(MarketIndex)
+                .where(MarketIndex.index_name == name)
+                .order_by(MarketIndex.date.desc())
+                .limit(1)
+            ).scalar_one_or_none()
+            if not r:
+                continue
 
-        # Fallback: latest available date
-        if not rows:
-            sub = (
-                select(func.max(MarketIndex.date))
-                .where(MarketIndex.market == market)
-                .scalar_subquery()
-            )
-            stmt = select(MarketIndex).where(
-                MarketIndex.market == market,
-                MarketIndex.date == sub,
-            )
-            rows = session.execute(stmt).scalars().all()
+            # Calculate change_pct from previous day
+            change_pct = r.change_pct
+            if change_pct is None:
+                prev = session.execute(
+                    select(MarketIndex)
+                    .where(MarketIndex.index_name == name,
+                           MarketIndex.date < r.date)
+                    .order_by(MarketIndex.date.desc())
+                    .limit(1)
+                ).scalar_one_or_none()
+                if prev and prev.value:
+                    change_pct = round((r.value - prev.value) / prev.value * 100, 2)
 
-        return jsonify([
-            {
+            result.append({
                 "index_name": r.index_name,
                 "date": r.date.isoformat(),
                 "value": r.value,
-                "change_pct": r.change_pct,
+                "change_pct": change_pct,
                 "trend_state": r.trend_state,
-            }
-            for r in rows
-        ])
+            })
+        return jsonify(result)
     finally:
         session.close()
 
