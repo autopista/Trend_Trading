@@ -467,7 +467,7 @@ def api_analyze(market: str, symbol: str):
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.7, "maxOutputTokens": 2048}
+            "generationConfig": {"temperature": 0.7, "maxOutputTokens": 8192}
         }
         resp = http_requests.post(url, json=payload, timeout=30)
         resp_data = resp.json()
