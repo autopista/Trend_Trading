@@ -14,6 +14,45 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+    /* Calendar popup */
+    .cal-overlay { position: fixed; inset: 0; z-index: 40; }
+    .cal-popup {
+      position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      margin-top: 8px; background: #1e293b; border: 1px solid #475569;
+      border-radius: 12px; padding: 16px; width: 280px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 50;
+    }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+    .cal-grid .day-label { font-size: 11px; color: #64748b; padding: 4px 0; }
+    .cal-grid .day {
+      font-size: 13px; padding: 6px 0; border-radius: 6px;
+      color: #475569; cursor: default; position: relative;
+    }
+    .cal-grid .day.has-signal { color: #e2e8f0; cursor: pointer; }
+    .cal-grid .day.has-signal:hover { background: #334155; }
+    .cal-grid .day.has-signal::after {
+      content: ''; position: absolute; bottom: 2px; left: 50%;
+      transform: translateX(-50%); width: 4px; height: 4px;
+      background: #3b82f6; border-radius: 50%;
+    }
+    .cal-grid .day.selected { background: #3b82f6; color: white; font-weight: 600; }
+    .cal-grid .day.selected::after { background: white; }
+    .cal-grid .day.today { outline: 2px solid #f59e0b; outline-offset: -2px; }
+    .date-nav-btn {
+      background: #334155; border: none; color: #94a3b8;
+      width: 28px; height: 28px; border-radius: 6px;
+      cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .date-nav-btn:hover { background: #475569; color: #e2e8f0; }
+    .date-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .date-nav-btn:disabled:hover { background: #334155; color: #94a3b8; }
+    .date-display-btn {
+      background: #334155; border: none; color: #e2e8f0;
+      padding: 4px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+    }
+    .date-display-btn:hover { background: #475569; }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen">
@@ -82,9 +121,16 @@
 
       <!-- Left: Signal List -->
       <div class="w-[340px] flex-shrink-0 bg-slate-800 rounded-lg overflow-hidden flex flex-col">
-        <div class="px-4 py-3 border-b border-slate-700 flex items-center justify-between">
-          <span class="text-sm font-semibold text-slate-300" id="signal-list-title">시그널 목록</span>
-          <button onclick="filterSignals('all')" class="text-xs text-slate-500 hover:text-slate-300" id="btn-show-all" style="display:none;">전체보기</button>
+        <div class="px-4 py-3 border-b border-slate-700">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-slate-300" id="signal-list-title">시그널 목록</span>
+            <button onclick="filterSignals('all')" class="text-xs text-slate-500 hover:text-slate-300" id="btn-show-all" style="display:none;">전체보기</button>
+          </div>
+          <div class="flex items-center justify-center gap-2 relative" id="date-nav">
+            <button class="date-nav-btn" id="btn-prev-date" onclick="navigateDate(-1)">&#9664;</button>
+            <button class="date-display-btn" id="date-display" onclick="toggleCalendar()">--.--(--)</button>
+            <button class="date-nav-btn" id="btn-next-date" onclick="navigateDate(1)">&#9654;</button>
+          </div>
         </div>
         <div id="signal-list" class="overflow-y-auto p-2 space-y-2" style="max-height: 500px;">
           <div class="text-center text-slate-500 text-sm py-8">데이터를 불러오는 중...</div>
@@ -179,6 +225,9 @@
     let macdChart = null;
     let rsiChart = null;
     let symbolNames = {};  // {ticker: display_name} mapping
+    let signalDates = [];       // available signal dates (descending)
+    let selectedDate = null;    // currently selected date string (YYYY-MM-DD)
+    let calendarOpen = false;
 
     // -----------------------------------------------------------------------
     // Navigation
@@ -210,6 +259,168 @@
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
+    }
+
+    // -----------------------------------------------------------------------
+    // Signal Date Navigation
+    // -----------------------------------------------------------------------
+    const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
+
+    function formatDateShort(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const day = DAY_NAMES[d.getDay()];
+      return `${mm}.${dd}(${day})`;
+    }
+
+    async function loadSignalDates() {
+      try {
+        const data = await fetchJSON(`/api/${market}/signals/dates`);
+        signalDates = data.dates || [];
+      } catch (e) {
+        console.error('Failed to load signal dates:', e);
+        signalDates = [];
+      }
+    }
+
+    function initSelectedDate() {
+      const stored = localStorage.getItem(`signal_date_${market}`);
+      if (stored && signalDates.includes(stored)) {
+        selectedDate = stored;
+      } else if (signalDates.length > 0) {
+        selectedDate = signalDates[0];
+      } else {
+        selectedDate = null;
+      }
+      updateDateDisplay();
+    }
+
+    function updateDateDisplay() {
+      const el = document.getElementById('date-display');
+      if (selectedDate) {
+        el.textContent = formatDateShort(selectedDate);
+      } else {
+        el.textContent = '--.--(--)';
+      }
+      const idx = signalDates.indexOf(selectedDate);
+      document.getElementById('btn-prev-date').disabled = (idx < 0 || idx >= signalDates.length - 1);
+      document.getElementById('btn-next-date').disabled = (idx <= 0);
+    }
+
+    function navigateDate(direction) {
+      if (!selectedDate || !signalDates.length) return;
+      const idx = signalDates.indexOf(selectedDate);
+      if (idx < 0) return;
+      const newIdx = idx - direction;
+      if (newIdx >= 0 && newIdx < signalDates.length) {
+        selectDate(signalDates[newIdx]);
+      }
+    }
+
+    function selectDate(dateStr) {
+      selectedDate = dateStr;
+      localStorage.setItem(`signal_date_${market}`, dateStr);
+      updateDateDisplay();
+      closeCalendar();
+      loadSignals();
+      loadSummary();
+    }
+
+    function toggleCalendar() {
+      if (calendarOpen) { closeCalendar(); } else { openCalendar(); }
+    }
+
+    function closeCalendar() {
+      calendarOpen = false;
+      const existing = document.getElementById('cal-popup');
+      if (existing) existing.remove();
+      const overlay = document.getElementById('cal-overlay');
+      if (overlay) overlay.remove();
+    }
+
+    function openCalendar() {
+      closeCalendar();
+      calendarOpen = true;
+
+      const overlay = document.createElement('div');
+      overlay.id = 'cal-overlay';
+      overlay.className = 'cal-overlay';
+      overlay.onclick = closeCalendar;
+      document.body.appendChild(overlay);
+
+      const popup = document.createElement('div');
+      popup.id = 'cal-popup';
+      popup.className = 'cal-popup';
+
+      const refDate = selectedDate ? new Date(selectedDate + 'T00:00:00') : new Date();
+      renderCalendarMonth(popup, refDate.getFullYear(), refDate.getMonth());
+
+      document.getElementById('date-nav').appendChild(popup);
+    }
+
+    function renderCalendarMonth(popup, year, month) {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0, 10);
+
+      const header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '◀';
+      prevBtn.style.cssText = 'background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:4px;';
+      prevBtn.onclick = (e) => { e.stopPropagation(); const m = month === 0 ? 11 : month - 1; const y = month === 0 ? year - 1 : year; popup.innerHTML = ''; renderCalendarMonth(popup, y, m); };
+
+      const title = document.createElement('span');
+      title.style.cssText = 'font-size:14px;font-weight:600;';
+      title.textContent = `${year}년 ${month + 1}월`;
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = '▶';
+      nextBtn.style.cssText = 'background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:4px;';
+      nextBtn.onclick = (e) => { e.stopPropagation(); const m = month === 11 ? 0 : month + 1; const y = month === 11 ? year + 1 : year; popup.innerHTML = ''; renderCalendarMonth(popup, y, m); };
+
+      header.append(prevBtn, title, nextBtn);
+      popup.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'cal-grid';
+
+      ['월','화','수','목','금','토','일'].forEach(d => {
+        const label = document.createElement('div');
+        label.className = 'day-label';
+        label.textContent = d;
+        grid.appendChild(label);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < startOffset; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.className = 'day';
+        cell.textContent = d;
+
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+        if (signalDates.includes(dateStr)) {
+          cell.classList.add('has-signal');
+          cell.onclick = (e) => { e.stopPropagation(); selectDate(dateStr); };
+        }
+        if (dateStr === selectedDate) cell.classList.add('selected');
+        if (dateStr === todayStr) cell.classList.add('today');
+
+        grid.appendChild(cell);
+      }
+
+      popup.appendChild(grid);
     }
 
     // -----------------------------------------------------------------------
@@ -252,7 +463,8 @@
     // -----------------------------------------------------------------------
     async function loadSummary() {
       try {
-        const data = await fetchJSON(`/api/${market}/signals/summary`);
+        const dateParam = selectedDate ? `?date=${selectedDate}` : '';
+        const data = await fetchJSON(`/api/${market}/signals/summary${dateParam}`);
         document.getElementById('count-buy').textContent = data.buy || 0;
         document.getElementById('count-sell').textContent = data.sell || 0;
         document.getElementById('count-watch').textContent = data.watch || 0;
@@ -269,7 +481,8 @@
 
     async function loadSignals() {
       try {
-        allSignals = await fetchJSON(`/api/${market}/signals`);
+        const dateParam = selectedDate ? `?date=${selectedDate}` : '';
+        allSignals = await fetchJSON(`/api/${market}/signals${dateParam}`);
         renderSignalList(allSignals);
       } catch (e) {
         console.error('Failed to load signals:', e);
@@ -662,8 +875,10 @@
     // Init
     // -----------------------------------------------------------------------
     updateMarketButtons();
-    loadSymbolNames().then(() => {
+    loadSymbolNames().then(async () => {
       loadIndices();
+      await loadSignalDates();
+      initSelectedDate();
       loadSummary();
       loadSignals();
     });
