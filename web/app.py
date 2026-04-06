@@ -187,21 +187,30 @@ def api_signals_dates(market: str):
 
 @app.route("/api/<market>/signals/summary")
 def api_signals_summary(market: str):
-    """Return buy/sell/watch counts for the latest signal date."""
+    """Return buy/sell/watch counts for a specific date.
+
+    Query params:
+        date: ISO date string. If omitted, uses most recent signal date.
+    """
     session = get_session()
     try:
-        # Find the most recent signal date for this market
-        latest_row = session.execute(
-            select(Signal.date)
-            .where(Signal.market == market)
-            .order_by(Signal.date.desc())
-            .limit(1)
-        ).scalar_one_or_none()
+        date_str = request.args.get("date")
+        if date_str:
+            from datetime import datetime as dt
+            target_date = dt.strptime(date_str, "%Y-%m-%d").date()
+        else:
+            latest_row = session.execute(
+                select(Signal.date)
+                .where(Signal.market == market)
+                .order_by(Signal.date.desc())
+                .limit(1)
+            ).scalar_one_or_none()
 
-        if not latest_row:
-            return jsonify({"buy": 0, "sell": 0, "watch": 0})
+            if not latest_row:
+                return jsonify({"buy": 0, "sell": 0, "watch": 0})
+            target_date = latest_row
 
-        stmt = select(Signal).where(Signal.market == market, Signal.date == latest_row)
+        stmt = select(Signal).where(Signal.market == market, Signal.date == target_date)
         rows = session.execute(stmt).scalars().all()
 
         counts = {"buy": 0, "sell": 0, "watch": 0}

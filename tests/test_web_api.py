@@ -110,3 +110,23 @@ class TestSignalDates:
         assert "2026-04-06" in dates
         assert "2026-04-03" in dates
         assert "2026-04-01" in dates
+
+
+class TestSignalsSummaryWithDate:
+    def test_summary_for_specific_date(self, client):
+        resp = client.get("/api/us/signals/summary?date=2026-04-03")
+        data = resp.get_json()
+        assert data["buy"] == 1
+        assert data["watch"] == 1
+        assert data["sell"] == 0
+
+    def test_summary_without_date_uses_latest(self, client):
+        resp = client.get("/api/us/signals/summary")
+        data = resp.get_json()
+        assert data["buy"] == 1
+        assert data["watch"] == 1
+
+    def test_summary_for_empty_date(self, client):
+        resp = client.get("/api/us/signals/summary?date=2099-01-01")
+        data = resp.get_json()
+        assert data == {"buy": 0, "sell": 0, "watch": 0}
