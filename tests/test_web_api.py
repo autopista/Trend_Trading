@@ -52,6 +52,32 @@ def client(monkeypatch):
     engine.dispose()
 
 
+class TestSignalsWithDate:
+    def test_filter_by_date(self, client):
+        resp = client.get("/api/us/signals?date=2026-04-03")
+        data = resp.get_json()
+        assert len(data) == 2  # AAPL + MSFT on that date
+        assert all(s["date"] == "2026-04-03" for s in data)
+
+    def test_without_date_returns_latest(self, client):
+        """No date param → returns signals from most recent date only."""
+        resp = client.get("/api/us/signals")
+        data = resp.get_json()
+        assert len(data) == 2
+        assert all(s["date"] == "2026-04-06" for s in data)
+
+    def test_invalid_date_returns_empty(self, client):
+        resp = client.get("/api/us/signals?date=2026-12-31")
+        data = resp.get_json()
+        assert data == []
+
+    def test_sorted_by_confidence_desc(self, client):
+        resp = client.get("/api/us/signals?date=2026-04-06")
+        data = resp.get_json()
+        confs = [s["confidence"] for s in data]
+        assert confs == sorted(confs, reverse=True)
+
+
 class TestSignalDates:
     def test_returns_dates_descending(self, client):
         """GET /api/us/signals/dates returns dates in descending order."""

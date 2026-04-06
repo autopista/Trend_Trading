@@ -120,13 +120,31 @@ def api_indices(market: str):
 
 @app.route("/api/<market>/signals")
 def api_signals(market: str):
-    """Return signals from the last 7 days, sorted by confidence descending."""
+    """Return signals for a specific date, sorted by confidence descending.
+
+    Query params:
+        date: ISO date string (e.g. 2026-04-06). If omitted, uses most recent signal date.
+    """
     session = get_session()
     try:
-        cutoff = date.today() - timedelta(days=7)
+        date_str = request.args.get("date")
+        if date_str:
+            from datetime import datetime as dt
+            target_date = dt.strptime(date_str, "%Y-%m-%d").date()
+        else:
+            latest = session.execute(
+                select(Signal.date)
+                .where(Signal.market == market)
+                .order_by(Signal.date.desc())
+                .limit(1)
+            ).scalar_one_or_none()
+            if not latest:
+                return jsonify([])
+            target_date = latest
+
         stmt = (
             select(Signal)
-            .where(Signal.market == market, Signal.date >= cutoff)
+            .where(Signal.market == market, Signal.date == target_date)
             .order_by(Signal.confidence.desc())
         )
         rows = session.execute(stmt).scalars().all()
