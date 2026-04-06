@@ -149,6 +149,24 @@ def api_signals(market: str):
         session.close()
 
 
+@app.route("/api/<market>/signals/dates")
+def api_signals_dates(market: str):
+    """Return list of dates that have signals, descending, limited to 90 days."""
+    session = get_session()
+    try:
+        cutoff = date.today() - timedelta(days=90)
+        stmt = (
+            select(Signal.date)
+            .where(Signal.market == market, Signal.date >= cutoff)
+            .distinct()
+            .order_by(Signal.date.desc())
+        )
+        rows = session.execute(stmt).scalars().all()
+        return jsonify({"dates": [d.isoformat() for d in rows]})
+    finally:
+        session.close()
+
+
 @app.route("/api/<market>/signals/summary")
 def api_signals_summary(market: str):
     """Return buy/sell/watch counts for the latest signal date."""
