@@ -130,3 +130,28 @@ class TestSignalsSummaryWithDate:
         resp = client.get("/api/us/signals/summary?date=2099-01-01")
         data = resp.get_json()
         assert data == {"buy": 0, "sell": 0, "watch": 0}
+
+
+class TestDateFilterIntegration:
+    def test_dates_and_signals_consistent(self, client):
+        """Signals returned for a date should match that date in dates list."""
+        dates_resp = client.get("/api/us/signals/dates")
+        dates = dates_resp.get_json()["dates"]
+
+        for d in dates:
+            signals_resp = client.get(f"/api/us/signals?date={d}")
+            signals = signals_resp.get_json()
+            assert len(signals) > 0, f"Date {d} in dates list but no signals"
+            assert all(s["date"] == d for s in signals)
+
+    def test_summary_matches_signals(self, client):
+        """Summary counts should match actual signal counts."""
+        for d in ["2026-04-06", "2026-04-03"]:
+            signals = client.get(f"/api/us/signals?date={d}").get_json()
+            summary = client.get(f"/api/us/signals/summary?date={d}").get_json()
+
+            actual = {"buy": 0, "sell": 0, "watch": 0}
+            for s in signals:
+                if s["signal_type"] in actual:
+                    actual[s["signal_type"]] += 1
+            assert summary == actual

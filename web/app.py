@@ -5,8 +5,9 @@ Routes:
     GET /<market>/dashboard            → render index.html
     GET /<market>/performance          → render performance.html
     GET /api/<market>/indices          → market indices for today
-    GET /api/<market>/signals          → signals from last 7 days
-    GET /api/<market>/signals/summary  → buy/sell/watch counts for today
+    GET /api/<market>/signals          → signals for a date (?date=YYYY-MM-DD)
+    GET /api/<market>/signals/dates    → list of dates with signals (90 days)
+    GET /api/<market>/signals/summary  → buy/sell/watch counts (?date=YYYY-MM-DD)
     GET /api/<market>/chart/<symbol>   → OHLCV + Livermore states
     GET /api/<market>/performance      → trade stats and signal accuracy
 """
