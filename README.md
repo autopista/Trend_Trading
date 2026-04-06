@@ -120,13 +120,48 @@ PYTHONPATH=. python web/app.py          # http://127.0.0.1:5002
 
 ## Signal Generation Logic
 
-시그널은 다음 조건의 조합으로 생성됩니다:
+### Buy (매수) 조건
 
-- **Buy**: 상승 추세 확인 + 거래량 급증 + RSI <= 70 + 시장 방향 상승/중립
-- **Sell**: 하락 추세 확인 + 거래량 급증 + 시장 방향 하락/중립
-- **Watch**: 위 조건 미충족 또는 confidence 임계값 미달
+5가지 조건이 **모두 충족**되어야 매수 시그널이 발생합니다:
 
-각 시그널에는 0-100% confidence 점수가 부여됩니다.
+| 조건 | 설명 |
+|------|------|
+| Breakout | 저항선(피봇 고점) 돌파 감지 |
+| Confirmed | 돌파가 확인됨 (일시적 돌파가 아님) |
+| Volume Surge | 거래량이 평균 대비 급증 |
+| Trend Aligned | Livermore 상태가 상승(up) 또는 중립(neutral) |
+| RSI <= 70 | 과매수 구간이 아님 |
+
+추가 강등(demote) 조건:
+
+- 전체 시장 방향이 **하락(down)** 이면 buy → watch로 강등
+- **Confidence < 60%** 이면 buy → watch로 강등
+
+### Sell (매도) 조건
+
+| 조건 | 설명 |
+|------|------|
+| Breakdown | 지지선(피봇 저점) 이탈 감지 |
+| Confirmed | 이탈이 확인됨 |
+| Volume Surge | 거래량이 평균 대비 급증 |
+| Trend Aligned | Livermore 상태가 하락(down) 또는 중립(neutral) |
+
+### Watch (관찰)
+
+위 Buy/Sell 조건을 충족하지 못하거나 confidence 임계값(60%) 미달 시 watch로 분류됩니다.
+
+### Confidence Score (신뢰도 점수)
+
+각 시그널에는 6가지 팩터를 합산한 0-100% confidence 점수가 부여됩니다:
+
+| 팩터 | 배점 | 계산 방법 |
+|------|------|-----------|
+| Pivot 명확도 | 0-25 | confirmed=25점, breakout/breakdown만 감지=10점 |
+| 거래량 | 0-20 | volume_ratio x 8 (최대 20) |
+| 시장 방향 일치 | 0-20 | 명확한 방향(up/down)=20점, neutral=10점 |
+| Livermore 강도 | 0-15 | trend_strength x 0.15 |
+| RSI | 0-10 | 30-70 구간=10점, 20-80 구간=5점 |
+| 횡보(consolidation) 기간 | 0-10 | consolidation_days x 1.0 |
 
 ## Configuration
 
