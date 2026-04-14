@@ -90,18 +90,21 @@ def run_phase1(config: dict, market: str, start_date: str, end_date: str) -> dic
                 upsert_prices(session, df, symbol, mkt)
                 logger.info("Upserted %d rows for %s (%s)", len(df), symbol, mkt)
 
-            # Upsert index data
-            for idx_name, df in data.get("indices", {}).items():
+            # Upsert index data — store OHLCV in Price table (for TrendAnalyzer)
+            # and daily close value in MarketIndex (for dashboard summary cards).
+            for idx_ticker, df in data.get("indices", {}).items():
+                display_name = collector.index_name_map.get(idx_ticker, idx_ticker)
+                upsert_prices(session, df, idx_ticker, mkt)
                 for _, row in df.iterrows():
                     upsert_market_index(
                         session,
-                        index_name=idx_name,
+                        index_name=display_name,
                         market=mkt,
                         dt=row["date"],
                         value=float(row["close"]),
                         change_pct=float(row.get("change_pct", 0)) if "change_pct" in row.index else None,
                     )
-                logger.info("Upserted %d index rows for %s", len(df), idx_name)
+                logger.info("Upserted %d index rows for %s (%s)", len(df), display_name, idx_ticker)
 
             if data.get("failed"):
                 logger.warning("[%s] Failed symbols: %s", mkt, data["failed"])
@@ -205,6 +208,7 @@ def run_phase3(
     )
     signal_gen = SignalGenerator(
         min_confidence=signals_cfg.get("min_confidence", 60),
+        confirm_days=livermore_cfg.get("false_breakout_confirm_days", 2),
     )
 
     market_cfg = config.get("markets", {}).get(market, {})
@@ -238,8 +242,10 @@ def run_phase3(
 
         logger.info("Market direction: %s", market_direction)
 
-        # Generate signals for ALL symbols in DB (not just watchlist)
-        all_symbols = get_all_symbols(session, market)
+        # Generate signals for ALL symbols in DB (not just watchlist),
+        # but exclude market indices — they're analyzed only for direction.
+        index_set = set(indices)
+        all_symbols = [s for s in get_all_symbols(session, market) if s not in index_set]
         logger.info("Generating signals for %d symbols", len(all_symbols))
 
         for symbol in all_symbols:

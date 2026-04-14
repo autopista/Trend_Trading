@@ -25,9 +25,63 @@ from sqlalchemy import and_, select, func
 # Load .env before anything else
 load_dotenv(Path(__file__).parent.parent / "config" / ".env")
 
+from collectors.market_collector import _parse_symbol_list
 from db.database import get_session, init_db
 from db.models import LivermoreState, MarketIndex, Price, Signal, Trade
+from db.repository import get_prices
+from livermore_engine.trend_analyzer import TrendAnalyzer
 from signals.signal_history import SignalHistory
+
+
+def _load_settings() -> dict:
+    """Load config/settings.yaml (cached at module import)."""
+    cfg_path = Path(__file__).parent.parent / "config" / "settings.yaml"
+    with open(cfg_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+_SETTINGS = _load_settings()
+
+
+def _compute_market_direction(session, market: str, target_date) -> str:
+    """Compute overall market trend direction for *market* up to *target_date*.
+
+    Mirrors the logic in ``update_all.py``: take the first configured index
+    ticker, pull a window of OHLCV ending at *target_date*, and run it through
+    :class:`TrendAnalyzer`.
+    """
+    import pandas as pd
+
+    market_cfg = _SETTINGS.get("markets", {}).get(market, {})
+    indices = _parse_symbol_list(market_cfg.get("indices", []))
+    if not indices:
+        return "neutral"
+
+    sd = target_date - timedelta(days=120)
+    rows = get_prices(session, indices[0], sd, target_date)
+    if len(rows) < 5:
+        return "neutral"
+
+    df = pd.DataFrame([
+        {
+            "date": p.date,
+            "open": p.open,
+            "high": p.high,
+            "low": p.low,
+            "close": p.close,
+            "volume": p.volume,
+        }
+        for p in rows
+    ])
+    livermore_cfg = _SETTINGS.get("livermore", {})
+    analyzer = TrendAnalyzer(
+        pivot_threshold_pct=livermore_cfg.get("pivot_threshold_pct", 5.0),
+    )
+    try:
+        ctx = analyzer.analyze_market(df)
+        return ctx.trend_direction
+    except Exception:
+        return "neutral"
 
 # ---------------------------------------------------------------------------
 # App factory
@@ -208,7 +262,12 @@ def api_signals_summary(market: str):
             ).scalar_one_or_none()
 
             if not latest_row:
-                return jsonify({"buy": 0, "sell": 0, "watch": 0})
+                return jsonify({
+                    "buy": 0, "sell": 0, "watch": 0,
+                    "market_direction": _compute_market_direction(
+                        session, market, date.today()
+                    ),
+                })
             target_date = latest_row
 
         stmt = select(Signal).where(Signal.market == market, Signal.date == target_date)
@@ -219,6 +278,9 @@ def api_signals_summary(market: str):
             if r.signal_type in counts:
                 counts[r.signal_type] += 1
 
+        counts["market_direction"] = _compute_market_direction(
+            session, market, target_date
+        )
         return jsonify(counts)
     finally:
         session.close()

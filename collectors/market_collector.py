@@ -148,7 +148,7 @@ class MarketCollector:
                     )
                     failed.append(idx_ticker)
                 else:
-                    indices[display_name] = df
+                    indices[idx_ticker] = df
             except Exception:
                 logger.exception(
                     "[%s] Failed to fetch index %s", market_name, display_name

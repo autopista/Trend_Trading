@@ -20,8 +20,16 @@ class SignalGenerator:
             becomes a 'watch'.
     """
 
-    def __init__(self, min_confidence: float = 60.0) -> None:
+    def __init__(
+        self,
+        min_confidence: float = 60.0,
+        confirm_days: int = 2,
+    ) -> None:
         self.min_confidence = min_confidence
+        # Recent-window size for finding a freshly confirmed pivot. The last
+        # (confirm_days) rows of the pivot frame are structurally unable to
+        # carry confirmed=True, so widen the search by that amount.
+        self.pivot_lookback = confirm_days + 1
 
     # ------------------------------------------------------------------
     # Public API
@@ -57,10 +65,28 @@ class SignalGenerator:
         price: float = results["price"]
         rsi: float = results["rsi"]
 
-        # Use last row of each DataFrame
+        # Use last row for market key / volume (reflects current state).
         mk_row = mk.iloc[-1]
-        pivot_row = pivots.iloc[-1]
         vol_row = vol.iloc[-1]
+
+        # Pivot row: search recent window for a confirmed breakout/breakdown.
+        # Today's row can never carry confirmed=True because the confirmation
+        # window (confirm_days forward bars) isn't complete yet.
+        window = min(len(pivots), self.pivot_lookback)
+        recent = pivots.tail(window)
+        recent_confirmed = recent[
+            recent["confirmed"]
+            & recent["pivot_type"].isin(["breakout", "breakdown"])
+        ]
+        if not recent_confirmed.empty:
+            pivot_row = recent_confirmed.iloc[-1]
+            # Use the volume surge recorded on the breakout day itself.
+            pivot_date = pivot_row["date"]
+            vol_on_pivot = vol[vol["date"] == pivot_date]
+            if not vol_on_pivot.empty:
+                vol_row = vol_on_pivot.iloc[0]
+        else:
+            pivot_row = pivots.iloc[-1]
 
         # Determine raw signal type
         is_breakout = pivot_row["pivot_type"] == "breakout"

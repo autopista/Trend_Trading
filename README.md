@@ -64,20 +64,45 @@ Dashboard   Notifier
 # 1. Clone & install
 git clone <repo-url>
 cd Trend_Trading
-pip install -r requirements.txt
+./run.sh install                         # 의존성 설치
 
 # 2. Configure
 cp config/.env.example config/.env
 # Edit config/.env with your API keys
 
-# 3. Run data pipeline
-python update_all.py                    # Full pipeline (KR + US)
-python update_all.py --market kr        # Korean market only
-python update_all.py --market us        # US market only
-python update_all.py --phase 1 --days 180  # Data collection only, 180 days
+# 3. Run
+./run.sh                                 # 전체 실행 (파이프라인 + 웹 서버)
+```
 
-# 4. Start dashboard
-PYTHONPATH=. python web/app.py          # http://127.0.0.1:5002
+## run.sh 사용법
+
+`run.sh`로 데이터 파이프라인과 웹 서버를 간편하게 실행할 수 있습니다.
+
+```bash
+# 전체 실행 (파이프라인 → 웹 서버)
+./run.sh
+
+# 데이터 파이프라인만 실행
+./run.sh update                          # KR + US 전체
+./run.sh update --market kr              # 한국 시장만
+./run.sh update --market us              # 미국 시장만
+./run.sh update --days 180               # 180일치 데이터
+
+# 특정 Phase만 실행
+./run.sh phase 1                         # 데이터 수집
+./run.sh phase 2                         # 리버모어 분석
+./run.sh phase 3                         # 시그널 생성
+./run.sh phase 4                         # 포트폴리오 업데이트
+./run.sh phase 2 --market kr             # 한국 시장 리버모어 분석만
+
+# 웹 서버만 실행
+./run.sh web                             # http://127.0.0.1:5002
+
+# 의존성 설치
+./run.sh install
+
+# 도움말
+./run.sh help
 ```
 
 ## Dashboard Features
@@ -227,7 +252,7 @@ Trend_Trading/
 ## Testing
 
 ```bash
-PYTHONPATH=. python -m pytest tests/ -v
+PYTHONPATH=. python3 -m pytest tests/ -v
 ```
 
 ## License

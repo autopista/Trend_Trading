@@ -83,6 +83,9 @@
              class="text-sm font-medium pb-1 border-b-2 border-blue-500 text-blue-400">대시보드</a>
           <a id="nav-performance"
              class="text-sm font-medium pb-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 cursor-pointer">투자성과</a>
+          <span id="market-direction-badge"
+                class="ml-2 px-2 py-0.5 text-xs font-semibold rounded-full bg-slate-700 text-slate-300"
+                title="전체 시장 방향 (지수 기준)">시장방향: -</span>
         </div>
       </div>
 
@@ -468,6 +471,26 @@
         document.getElementById('count-buy').textContent = data.buy || 0;
         document.getElementById('count-sell').textContent = data.sell || 0;
         document.getElementById('count-watch').textContent = data.watch || 0;
+
+        const badge = document.getElementById('market-direction-badge');
+        if (badge) {
+          const dir = data.market_direction || 'neutral';
+          const label = { up: '상승', down: '하락', neutral: '중립' }[dir] || dir;
+          badge.textContent = `시장방향: ${label}`;
+          badge.classList.remove(
+            'bg-slate-700', 'text-slate-300',
+            'bg-emerald-600', 'text-white',
+            'bg-rose-600',
+            'bg-amber-600'
+          );
+          if (dir === 'up') {
+            badge.classList.add('bg-emerald-600', 'text-white');
+          } else if (dir === 'down') {
+            badge.classList.add('bg-rose-600', 'text-white');
+          } else {
+            badge.classList.add('bg-amber-600', 'text-white');
+          }
+        }
       } catch (e) {
         console.error('Failed to load summary:', e);
       }
