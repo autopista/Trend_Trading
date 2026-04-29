@@ -86,7 +86,7 @@ markets:
     - ticker: '138040'
       name: 메리츠금융지주
     - ticker: 079550
-      name: LIG넥스원
+      name: LIG디펜스앤에어로스페이스
     - ticker: '011200'
       name: HMM
     - ticker: '003670'
@@ -120,85 +120,85 @@ markets:
     - ticker: 010950
       name: S-Oil
     - ticker: '278470'
-      name: 삼성에피스홀딩스
-    - ticker: '071050'
       name: 에이피알
-    - ticker: 018260
+    - ticker: '071050'
       name: 한국금융지주
-    - ticker: '352820'
+    - ticker: 018260
       name: 삼성에스디에스
-    - ticker: '259960'
+    - ticker: '352820'
       name: 하이브
-    - ticker: 005830
+    - ticker: '259960'
       name: 크래프톤
-    - ticker: '323410'
+    - ticker: 005830
       name: DB손해보험
-    - ticker: 039490
+    - ticker: '323410'
       name: 카카오뱅크
-    - ticker: 005940
+    - ticker: 039490
       name: 키움증권
-    - ticker: '307950'
+    - ticker: 005940
       name: NH투자증권
-    - ticker: '003230'
+    - ticker: '307950'
       name: 현대오토에버
-    - ticker: '396500'
+    - ticker: '003230'
       name: 삼양식품
-    - ticker: 000880
+    - ticker: '396500'
       name: TIGER 반도체TOP10
-    - ticker: 003490
+    - ticker: 000880
       name: 한화
-    - ticker: '006260'
+    - ticker: 003490
       name: 대한항공
-    - ticker: '016360'
+    - ticker: '006260'
       name: LS
-    - ticker: 005387
+    - ticker: '016360'
       name: 삼성증권
-    - ticker: '133690'
+    - ticker: 005387
       name: 현대차2우B
-    - ticker: '443060'
+    - ticker: '133690'
       name: TIGER 미국나스닥100
-    - ticker: '379800'
+    - ticker: '443060'
       name: HD현대마린솔루션
-    - ticker: 028050
+    - ticker: '379800'
       name: KODEX 미국S&P500
-    - ticker: '459580'
+    - ticker: 028050
       name: 삼성E&A
-    - ticker: '488770'
+    - ticker: '459580'
       name: KODEX CD금리액티브(합성)
-    - ticker: 090430
+    - ticker: '488770'
       name: KODEX 머니마켓액티브
-    - ticker: '011070'
+    - ticker: 090430
       name: 아모레퍼시픽
-    - ticker: '007660'
+    - ticker: '011070'
       name: LG이노텍
-    - ticker: '000100'
+    - ticker: '007660'
       name: 이수페타시스
-    - ticker: '326030'
+    - ticker: '000100'
       name: 유한양행
-    - ticker: '180640'
+    - ticker: '326030'
       name: SK바이오팜
-    - ticker: '102110'
+    - ticker: '180640'
       name: 한진칼
-    - ticker: '267270'
+    - ticker: '102110'
       name: TIGER 200
-    - ticker: '047040'
+    - ticker: '267270'
       name: HD건설기계
-    - ticker: 009830
+    - ticker: '047040'
       name: 대우건설
-    - ticker: 066970
+    - ticker: 009830
       name: 한화솔루션
-    - ticker: '032640'
+    - ticker: 066970
       name: 엘앤에프
-    - ticker: '128940'
+    - ticker: '032640'
       name: LG유플러스
-    - ticker: '377300'
+    - ticker: '128940'
       name: 한미약품
-    - ticker: '161390'
+    - ticker: '377300'
       name: 카카오페이
-    - ticker: '229200'
+    - ticker: '161390'
       name: 한국타이어앤테크놀로지
-    - ticker: 052690
+    - ticker: '229200'
       name: KODEX 코스닥150
+    - ticker: 052690
+      name: 한전기술
     - ticker: '196170'
       name: 알테오젠
     - ticker: 086520
@@ -246,57 +246,57 @@ markets:
     - ticker: '043260'
       name: 성호전자
     - ticker: '319400'
-      name: 에임드바이오
-    - ticker: '214450'
       name: 현대무벡스
-    - ticker: '347850'
+    - ticker: '214450'
       name: 파마리서치
-    - ticker: '145020'
+    - ticker: '347850'
       name: 디앤디파마텍
-    - ticker: '357780'
+    - ticker: '145020'
       name: 휴젤
-    - ticker: 036930
+    - ticker: '357780'
       name: 솔브레인
-    - ticker: '237690'
+    - ticker: 036930
       name: 주성엔지니어링
-    - ticker: 083650
+    - ticker: '237690'
       name: 에스티팜
-    - ticker: 084370
+    - ticker: 083650
       name: 비에이치아이
-    - ticker: '178320'
+    - ticker: 084370
       name: 유진테크
-    - ticker: '140410'
+    - ticker: '178320'
       name: 서진시스템
-    - ticker: '476830'
+    - ticker: '140410'
       name: 메지온
-    - ticker: '440110'
+    - ticker: '476830'
       name: 알지노믹스
-    - ticker: '257720'
+    - ticker: '440110'
       name: 파두
-    - ticker: 068760
+    - ticker: '257720'
       name: 실리콘투
-    - ticker: '064760'
+    - ticker: 068760
       name: 셀트리온제약
-    - ticker: 005290
+    - ticker: '064760'
       name: 티씨케이
-    - ticker: '218410'
+    - ticker: 005290
       name: 동진쎄미켐
-    - ticker: 058610
+    - ticker: '218410'
       name: RFHIC
-    - ticker: '347700'
+    - ticker: 058610
       name: 에스피지
-    - ticker: '376900'
+    - ticker: '347700'
       name: 스피어
-    - ticker: '319660'
+    - ticker: '376900'
       name: 로킷헬스케어
-    - ticker: 035900
+    - ticker: '319660'
       name: 피에스케이
-    - ticker: '030530'
+    - ticker: 035900
       name: JYP Ent.
-    - ticker: 031980
+    - ticker: '030530'
       name: 원익홀딩스
-    - ticker: '010170'
+    - ticker: 031980
       name: 피에스케이홀딩스
+    - ticker: '010170'
+      name: 대한광통신
     - ticker: '041510'
       name: 에스엠
     - ticker: '067310'
