@@ -1,0 +1,24 @@
+[Unit]
+Description=Trend Trading Flask Web Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=trendtrading
+Group=trendtrading
+WorkingDirectory=/home/trendtrading/Trend_Trading
+EnvironmentFile=/home/trendtrading/Trend_Trading/config/.env
+Environment=PYTHONPATH=/home/trendtrading/Trend_Trading
+ExecStart=/home/trendtrading/Trend_Trading/venv/bin/gunicorn \
+  --chdir /home/trendtrading/Trend_Trading \
+  --bind 0.0.0.0:5002 \
+  --workers 2 \
+  --timeout 60 \
+  --access-logfile /home/trendtrading/Trend_Trading/logs/gunicorn-access.log \
+  --error-logfile /home/trendtrading/Trend_Trading/logs/gunicorn-error.log \
+  web.app:app
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

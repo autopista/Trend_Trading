@@ -1,0 +1,10 @@
+[Unit]
+Description=Trend Trading SQLite DB Backup to GCS
+
+[Service]
+Type=oneshot
+User=trendtrading
+Group=trendtrading
+ExecStart=/home/trendtrading/Trend_Trading/scripts/backup_db.sh
+StandardOutput=append:/home/trendtrading/Trend_Trading/logs/backup.log
+StandardError=append:/home/trendtrading/Trend_Trading/logs/backup.log

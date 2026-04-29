@@ -1,0 +1,14 @@
+[Unit]
+Description=Trend Trading KR Pipeline
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=trendtrading
+Group=trendtrading
+WorkingDirectory=/home/trendtrading/Trend_Trading
+EnvironmentFile=/home/trendtrading/Trend_Trading/config/.env
+Environment=PYTHONPATH=/home/trendtrading/Trend_Trading
+ExecStart=/home/trendtrading/Trend_Trading/venv/bin/python3 update_all.py --market kr
+StandardOutput=append:/home/trendtrading/Trend_Trading/logs/daily_kr.log
+StandardError=append:/home/trendtrading/Trend_Trading/logs/daily_kr.log
