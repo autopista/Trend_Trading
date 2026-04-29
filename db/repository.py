@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional, Sequence
 
 import pandas as pd
 from sqlalchemy import select
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session
 
 from db.models import (
@@ -156,11 +157,45 @@ def get_latest_livermore_state(
 # ── Signal ───────────────────────────────────────────────────────────────
 
 def save_signal(session: Session, signal: Signal) -> Signal:
-    """Add a Signal to the session and commit."""
-    session.add(signal)
+    """Insert or update a Signal (upsert on symbol+market+date+signal_type)."""
+    created_at = signal.created_at or datetime.utcnow()
+    notified = bool(signal.notified) if signal.notified is not None else False
+    stmt = sqlite_insert(Signal).values(
+        symbol=signal.symbol,
+        market=signal.market,
+        date=signal.date,
+        signal_type=signal.signal_type,
+        price=signal.price,
+        target_price=signal.target_price,
+        stop_price=signal.stop_price,
+        reason=signal.reason,
+        confidence=signal.confidence,
+        notified=notified,
+        created_at=created_at,
+    )
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["symbol", "market", "date", "signal_type"],
+        set_={
+            "price": stmt.excluded.price,
+            "target_price": stmt.excluded.target_price,
+            "stop_price": stmt.excluded.stop_price,
+            "reason": stmt.excluded.reason,
+            "confidence": stmt.excluded.confidence,
+            "created_at": stmt.excluded.created_at,
+        },
+    )
+    session.execute(stmt)
     session.commit()
-    session.refresh(signal)
-    return signal
+
+    refreshed = session.execute(
+        select(Signal).where(
+            Signal.symbol == signal.symbol,
+            Signal.market == signal.market,
+            Signal.date == signal.date,
+            Signal.signal_type == signal.signal_type,
+        )
+    ).scalar_one()
+    return refreshed
 
 
 def get_signals_by_date(
