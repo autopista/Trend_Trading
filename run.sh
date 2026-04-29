@@ -45,9 +45,8 @@ cmd_install() {
 # 데이터 파이프라인 실행
 cmd_update() {
     check_env
-    local extra_args=("$@")
     log "데이터 파이프라인 실행..."
-    python3 update_all.py "${extra_args[@]}"
+    python3 update_all.py "$@"
     log "파이프라인 완료"
 }
 
@@ -56,9 +55,8 @@ cmd_phase() {
     check_env
     local phase_num="$1"
     shift
-    local extra_args=("$@")
     log "Phase ${phase_num} 실행..."
-    python3 update_all.py --phase "$phase_num" "${extra_args[@]}"
+    python3 update_all.py --phase "$phase_num" "$@"
     log "Phase ${phase_num} 완료"
 }
 
