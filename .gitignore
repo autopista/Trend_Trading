@@ -4,3 +4,20 @@ __pycache__/
 *.pyc
 .superpowers/
 .pytest_cache/
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+
+# Backup files
+*.bak
+0
+config/settings.yaml.bak
+
+# macOS launchd 전용 (VM에서는 systemd 사용)
+com.youngho.trendtrading-*.plist
+register_test_us.sh
+run_daily_kr.sh
+run_daily_us.sh
