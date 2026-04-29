@@ -9,3 +9,6 @@ python-dotenv==1.*
 apscheduler==3.10.*
 pytest==8.*
 gunicorn==21.*
+# setuptools 80+ removed pkg_resources from default install,
+# but pykrx 1.0.x still imports it.
+setuptools<70
