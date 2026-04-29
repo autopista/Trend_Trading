@@ -433,11 +433,11 @@
         const buyAcc = accuracy.buy_accuracy || 0;
         const sellAcc = accuracy.sell_accuracy || 0;
 
-        document.getElementById('acc-buy-label').textContent = `${(buyAcc * 100).toFixed(1)}%`;
-        document.getElementById('acc-buy-bar').style.width = `${buyAcc * 100}%`;
+        document.getElementById('acc-buy-label').textContent = `${buyAcc.toFixed(1)}%`;
+        document.getElementById('acc-buy-bar').style.width = `${Math.min(buyAcc, 100)}%`;
 
-        document.getElementById('acc-sell-label').textContent = `${(sellAcc * 100).toFixed(1)}%`;
-        document.getElementById('acc-sell-bar').style.width = `${sellAcc * 100}%`;
+        document.getElementById('acc-sell-label').textContent = `${sellAcc.toFixed(1)}%`;
+        document.getElementById('acc-sell-bar').style.width = `${Math.min(sellAcc, 100)}%`;
       }
 
       // Stats
