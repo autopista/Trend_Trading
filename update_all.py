@@ -332,6 +332,17 @@ def run_phase3(
 
     all_signals = signal_gen.prioritize(all_signals)
     logger.info("Phase 3 complete — %d total signals", len(all_signals))
+
+    # Daily heartbeat — confirm pipeline ran end-to-end even when no buy/sell.
+    try:
+        asyncio.get_event_loop().run_until_complete(
+            notifier.notify_pipeline_complete(market, all_signals)
+        )
+    except RuntimeError:
+        asyncio.run(notifier.notify_pipeline_complete(market, all_signals))
+    except Exception:
+        logger.exception("Telegram pipeline-complete notification failed")
+
     return all_signals
 
 

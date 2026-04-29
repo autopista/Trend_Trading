@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import os
+from datetime import date as _date
 from pathlib import Path
 
 import yaml
@@ -90,6 +91,36 @@ class TelegramNotifier:
             message: Human-readable error description.
         """
         text = f"⚠️ 오류 알림\n━━━━━━━━━━━━━━━━━━\n{message}"
+        await self._send(text)
+
+    async def notify_pipeline_complete(
+        self,
+        market: str,
+        signals: list[dict],
+        run_date: _date | None = None,
+    ) -> None:
+        """Send a one-line daily pipeline-complete summary.
+
+        Acts as a daily heartbeat — confirms VM/network/Telegram are
+        operational even on days with no buy/sell signals.
+
+        Args:
+            market: ``"kr"`` or ``"us"``.
+            signals: Full list of signals produced in this run (any type).
+            run_date: Date label in the message (defaults to ``date.today()``).
+        """
+        if run_date is None:
+            run_date = _date.today()
+        counts = {"buy": 0, "sell": 0, "watch": 0}
+        for s in signals:
+            st = s.get("signal_type", "watch")
+            if st in counts:
+                counts[st] += 1
+        flag = "🇰🇷" if market.lower() == "kr" else "🇺🇸"
+        text = (
+            f"{flag} {market.upper()} 점검 완료 — {run_date}\n"
+            f"🟢 매수 {counts['buy']}  🔴 매도 {counts['sell']}  👀 관찰 {counts['watch']}"
+        )
         await self._send(text)
 
     # ------------------------------------------------------------------
