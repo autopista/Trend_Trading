@@ -15,7 +15,7 @@
 |------|------|
 | 배포 범위 | 데일리 배치 + 웹 대시보드 모두 VM으로 이전 |
 | 웹 접근 제어 | Cloud IAP (Google 로그인, `cyh1024@gmail.com`만 허용) |
-| GCP 환경 | 기존 VM `openclaw-instance` (Ubuntu 22.04, e2-small, us-central1-a)에 공존 |
+| GCP 환경 | 기존 VM `openclaw-instance` (Ubuntu 22.04, e2-small, us-central1-a)에 공존 — 프로젝트 `black-diorama-487911-n5` |
 | 격리 방식 | 별도 시스템 사용자 `trendtrading`, 별도 디렉토리, systemd unit |
 | 도메인 | 없음 — `<static-IP>.sslip.io` 형식 사용 (비용 0) |
 | 배포 방식 | GitHub git pull + systemd restart |

@@ -16,7 +16,7 @@
 
 | 변수 | 값 | 결정 시점 |
 |------|-----|----------|
-| `$GCP_PROJECT_ID` | (Phase B-0에서 확인) | gcloud config get-value project |
+| `$GCP_PROJECT_ID` | `black-diorama-487911-n5` | 확정 (OpenClaw 프로젝트) |
 | `$VM_NAME` | `openclaw-instance` | 고정 |
 | `$VM_ZONE` | `us-central1-a` | 고정 |
 | `$VM_EXTERNAL_IP` | (Phase B-1에서 결정) | 정적 IP 예약 후 |
