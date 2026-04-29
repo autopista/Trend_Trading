@@ -19,8 +19,8 @@
 | `$GCP_PROJECT_ID` | `black-diorama-487911-n5` | 확정 (OpenClaw 프로젝트) |
 | `$VM_NAME` | `openclaw-instance` | 고정 |
 | `$VM_ZONE` | `us-central1-a` | 고정 |
-| `$VM_EXTERNAL_IP` | (Phase B-1에서 결정) | 정적 IP 예약 후 |
-| `$IP_DOMAIN` | `<dash-separated-IP>.sslip.io` | 정적 IP 예약 후 |
+| `$VM_EXTERNAL_IP` | `34.149.65.15` | 확정 (Phase B Task 8) |
+| `$IP_DOMAIN` | `34-149-65-15.sslip.io` | 확정 (Phase B Task 8) |
 | `$OAUTH_CLIENT_ID` | (Phase E-4에서 발급) | OAuth Client 생성 후 |
 | `$OAUTH_CLIENT_SECRET` | (Phase E-4에서 발급) | OAuth Client 생성 후 |
 | `$BACKUP_BUCKET` | `gs://trend-trading-backup-$GCP_PROJECT_ID` | Phase B-2 |
