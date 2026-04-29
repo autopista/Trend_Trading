@@ -106,6 +106,12 @@ def index():
     return redirect(url_for("dashboard", market="kr"))
 
 
+@app.route("/healthz")
+def healthz():
+    """Health check endpoint for GCP HTTP Load Balancer."""
+    return "ok", 200
+
+
 @app.route("/<market>/dashboard")
 def dashboard(market: str):
     """Render the main dashboard page."""
