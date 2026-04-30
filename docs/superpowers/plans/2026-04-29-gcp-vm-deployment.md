@@ -38,7 +38,7 @@
 | `scripts/backup_db.sh` | VM | 생성 | SQLite → GCS 일일 백업 |
 | `/etc/systemd/system/trend-web.service` | VM | 생성 | gunicorn 상시 실행 |
 | `/etc/systemd/system/trend-kr.service` | VM | 생성 | KR 일배치 |
-| `/etc/systemd/system/trend-kr.timer` | VM | 생성 | KR 08:30 KST |
+| `/etc/systemd/system/trend-kr.timer` | VM | 생성 | KR 20:30 KST |
 | `/etc/systemd/system/trend-us.service` | VM | 생성 | US 일배치 |
 | `/etc/systemd/system/trend-us.timer` | VM | 생성 | US 09:30 KST |
 | `/etc/systemd/system/trend-backup.service` | VM | 생성 | DB 백업 |
@@ -841,10 +841,10 @@ EOF
 ```bash
 sudo tee /etc/systemd/system/trend-kr.timer > /dev/null <<'EOF'
 [Unit]
-Description=Daily KR pipeline at 08:30 KST
+Description=Daily KR pipeline at 20:30 KST
 
 [Timer]
-OnCalendar=*-*-* 08:30:00 Asia/Seoul
+OnCalendar=*-*-* 20:30:00 Asia/Seoul
 Persistent=true
 Unit=trend-kr.service
 
@@ -1017,7 +1017,7 @@ sudo systemctl enable --now trend-kr.timer trend-us.timer trend-backup.timer
 sudo systemctl list-timers --all | grep trend
 ```
 
-Expected: 3개 타이머가 모두 표시되고, 다음 실행 시각이 KST 기준 08:30/09:30/03:00에 해당하는 UTC 시각으로 표기 (예: 08:30 KST = 23:30 UTC).
+Expected: 3개 타이머가 모두 표시되고, 다음 실행 시각이 KST 기준 20:30/09:30/03:00에 해당하는 UTC 시각으로 표기 (예: 20:30 KST = 11:30 UTC).
 
 ---
 
@@ -1571,7 +1571,7 @@ Expected: 출력 없음.
 
 | 작업 | systemd unit | 스케줄 (KST) |
 |------|-------------|-------------|
-| 한국 시장 | `trend-kr.timer` | 매일 08:30 KST |
+| 한국 시장 | `trend-kr.timer` | 매일 20:30 KST |
 | 미국 시장 | `trend-us.timer` | 매일 09:30 KST |
 | DB 백업 | `trend-backup.timer` | 매일 03:00 KST |
 
@@ -1626,7 +1626,7 @@ git push origin main
 - [ ] `gcloud compute ssh openclaw-instance ... sudo systemctl status trend-web` → active (running)
 - [ ] `https://<IP>.sslip.io` 접속 → Google 로그인 → 대시보드 정상 표시
 - [ ] 다른 Google 계정으로 같은 URL 접근 → IAP 차단 화면
-- [ ] 매일 KR 08:30 KST + US 09:30 KST에 Telegram 알림 도착
+- [ ] 매일 KR 20:30 KST + US 09:30 KST에 Telegram 알림 도착
 - [ ] `gsutil ls gs://trend-trading-backup-.../daily/ | wc -l` → 매일 1씩 증가
 - [ ] 맥 `launchctl list | grep trendtrading` → 출력 없음
 - [ ] VM에서 OpenClaw 정상 동작 (영향 없음)

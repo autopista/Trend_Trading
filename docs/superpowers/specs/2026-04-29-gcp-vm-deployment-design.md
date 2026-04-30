@@ -50,7 +50,7 @@
                   │                      │   │                                      │    │
                   │                      │   │  systemd units (Asia/Seoul TZ):      │    │
                   └──────────────────────┼───┤  ─ trend-web.service (gunicorn)      │    │
-                                         │   │  ─ trend-kr.timer (매일 08:30 KST)   │    │
+                                         │   │  ─ trend-kr.timer (매일 20:30 KST)   │    │
                                          │   │  ─ trend-us.timer (매일 09:30 KST)   │    │
                                          │   │  ─ trend-backup.timer (매일 03:00)   │    │
                                          │   └──────────────┬───────────────────────┘    │
@@ -217,10 +217,10 @@ StandardError=append:/home/trendtrading/Trend_Trading/logs/daily_kr.log
 ```ini
 # trend-kr.timer
 [Unit]
-Description=Daily KR pipeline at 08:30 KST
+Description=Daily KR pipeline at 20:30 KST
 
 [Timer]
-OnCalendar=*-*-* 08:30:00 Asia/Seoul
+OnCalendar=*-*-* 20:30:00 Asia/Seoul
 Persistent=true
 
 [Install]

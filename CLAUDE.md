@@ -31,7 +31,7 @@
 
 | 작업 | systemd unit | 스케줄 (KST) |
 |------|-------------|-------------|
-| 한국 시장 | `trend-kr.timer` | 매일 08:30 KST |
+| 한국 시장 | `trend-kr.timer` | 매일 20:30 KST |
 | 미국 시장 | `trend-us.timer` | 매일 09:30 KST |
 | DB 백업 | `trend-backup.timer` | 매일 03:00 KST |
 | 웹 서버 | `trend-web.service` | 상시 (gunicorn) |
